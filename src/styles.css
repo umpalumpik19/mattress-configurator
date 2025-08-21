@@ -1,0 +1,120 @@
+/* Глобальные стили */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    Inter, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* Дополнительные стили для компонентов */
+.mattress-configurator {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Скроллбар */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track { background: transparent; }
+
+::-webkit-scrollbar-thumb { background: color-mix(in oklab, var(--accent) 55%, transparent); border-radius: 8px; }
+
+::-webkit-scrollbar-thumb:hover { background: color-mix(in oklab, var(--accent) 70%, transparent); }
+
+/* Анимация при наведении */
+/* Мягкий lift на hover для любых карточек с классом .option-card/.control-box */
+.option-card:hover, .control-box:hover { transform: translateY(-1px); }
+
+.add-to-cart-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.add-to-cart-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--accent) 25%, transparent), transparent);
+  transition: left var(--dur) var(--elev);
+}
+
+.add-to-cart-btn:hover::before {
+  left: 100%;
+}
+
+/* Пульсация цены */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Отключаем постоянную пульсацию, оставим статичный Apple‑подобный вид */
+.price-value { animation: none; }
+
+/* Медиа-запросы для планшетов */
+@media (max-width: 1024px) and (min-width: 641px) {
+  .configurator-wrapper {
+    padding: 0 20px;
+  }
+
+  .image-radio-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .mattress-visualization {
+    height: 400px;
+  }
+}
+
+/* Дополнительные стили для мобильных */
+@media (max-width: 640px) {
+  .option-group {
+    padding: 0 10px;
+  }
+
+  .image-placeholder {
+    width: 32px;
+    height: 32px;
+  }
+
+  .option-text {
+    font-size: 10px;
+  }
+
+  .price-breakdown {
+    font-size: 12px;
+  }
+
+  .price-breakdown td {
+    padding: 6px 0;
+  }
+}

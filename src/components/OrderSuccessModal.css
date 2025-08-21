@@ -1,0 +1,303 @@
+/* Order Success Modal Styles - соответствует дизайну корзины */
+
+.order-success-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+  opacity: 0;
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.order-success-modal {
+  background: #2c2c54;
+  border-radius: 15px;
+  padding: 30px;
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transform: scale(0.9) translateY(20px);
+  animation: slideUp 0.4s ease-out 0.1s forwards;
+}
+
+.close-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  font-size: 20px;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.close-button:hover {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Success Header */
+.success-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.success-icon {
+  margin-bottom: 20px;
+}
+
+.checkmark {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: block;
+  stroke-width: 3;
+  stroke: #4CAF50;
+  stroke-miterlimit: 10;
+  margin: 0 auto;
+  animation: checkmark-bounce 0.6s ease-in-out 0.3s both;
+}
+
+.checkmark-circle {
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  stroke-width: 2;
+  animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.checkmark-check {
+  transform-origin: 50% 50%;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.5s forwards;
+}
+
+.success-header h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0;
+  color: #4CAF50;
+}
+
+/* Order Details */
+.order-details {
+  margin-bottom: 25px;
+}
+
+.order-number {
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 12px;
+  background: rgba(76, 175, 80, 0.15);
+  border-radius: 8px;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.order-number strong {
+  color: #4CAF50;
+  font-weight: 700;
+}
+
+.confirmation-text {
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.confirmation-text strong {
+  color: #4CAF50;
+}
+
+/* Next Steps */
+.next-steps {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.next-steps h3 {
+  color: #4CAF50;
+  font-size: 16px;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.next-steps ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.next-steps li {
+  padding: 6px 0;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.next-steps li::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  background-color: #4CAF50;
+  border-radius: 50%;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+/* Payment Info */
+.payment-info {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.payment-info p {
+  margin: 6px 0;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.payment-info strong {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Success Footer */
+.success-footer {
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.continue-shopping {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  color: #ffffff;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+  min-width: 180px;
+}
+
+.continue-shopping:hover {
+  background: linear-gradient(135deg, #45a049 0%, #4CAF50 100%);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  to {
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes stroke {
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes checkmark-bounce {
+  0%, 20% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.1);
+  }
+  60% {
+    transform: scale(0.95);
+  }
+  80% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .order-success-modal {
+    padding: 25px 20px;
+    margin: 15px;
+    border-radius: 12px;
+    max-height: 85vh;
+  }
+
+  .success-header h2 {
+    font-size: 20px;
+  }
+
+  .checkmark {
+    width: 50px;
+    height: 50px;
+  }
+
+  .order-number {
+    font-size: 15px;
+    padding: 10px;
+  }
+
+  .confirmation-text {
+    font-size: 13px;
+  }
+
+  .next-steps {
+    padding: 15px;
+  }
+
+  .next-steps h3 {
+    font-size: 14px;
+  }
+
+  .next-steps li {
+    font-size: 12px;
+  }
+
+  .continue-shopping {
+    padding: 10px 25px;
+    font-size: 13px;
+    min-width: 160px;
+  }
+}
