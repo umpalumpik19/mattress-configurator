@@ -190,7 +190,7 @@ git add .
 git commit -m "Initial commit with full backend"
 
 # 4. Указываем адрес вашего GitHub репозитория
-git remote add origin https://github.com/YOUR_USERNAME/mattress-configurator.git
+git remote add origin https://github.com/umpalumpik19/mattress-configurator.git
 
 # 5. Отправляем код на GitHub
 git push -u origin main
