@@ -56,3 +56,32 @@ export const sendAdminNotification = async (orderData) => {
     return { success: false, error };
   }
 };
+
+// Отправка уведомления о изменении статуса заказа
+export const sendStatusUpdateNotification = async (orderData, status, deliveryDate = null, deliveryTimeSlot = null) => {
+  try {
+    const { data, error } = await supabase.functions.invoke('send-email', {
+      body: {
+        type: 'status_update',
+        orderData: {
+          ...orderData,
+          status: status,
+          delivery_date: deliveryDate,
+          delivery_time_slot: deliveryTimeSlot
+        }
+      }
+    });
+
+    if (error) {
+      console.error('Status update email error:', error);
+      return { success: false, error };
+    }
+
+    console.log('Status update email sent successfully:', data);
+    return { success: true, response: data };
+
+  } catch (error) {
+    console.error('Status update email failed:', error);
+    return { success: false, error };
+  }
+};

@@ -207,3 +207,193 @@ src/api/
 - **Modern Buttons** - Gradient backgrounds with hover effects
 - **Custom Radio Buttons** - Styled with accent colors
 - **Mobile Responsive** - Adaptive layouts for all screen sizes
+
+## Admin Panel System
+
+### Overview
+Complete admin dashboard for order management with authentication, status tracking, and email notifications. Built with React Router and modern UI components.
+
+### Access
+- **URL**: `/admin` 
+- **Login**: 123 / 123
+- **Features**: Order management, status updates, email notifications, responsive design
+
+### Database Tables
+**Enhanced PostgreSQL schema with admin functionality:**
+
+1. **orders** (enhanced)
+   - Full order tracking with status history
+   - Delivery method support (courier/pickup)
+   - Admin notes and status timestamps
+   - Payment information and customer details
+
+2. **admin_users** 
+   - Simple authentication system
+   - Username/password storage
+   - Session management
+
+3. **order_status_history**
+   - Complete audit trail for all status changes
+   - Admin user tracking
+   - Timestamp and notes for each transition
+
+### Status Workflow
+
+#### Pickup Orders
+```
+pending → approved → ready_for_pickup → picked_up
+processing → approved → ready_for_pickup → picked_up
+```
+
+#### Delivery Orders  
+```
+pending → approved → handed_over → delivered
+processing → approved → handed_over → delivered
+```
+
+**Status Definitions:**
+- `pending` - Новые заказы (совместимость с существующими данными)
+- `processing` - Заказы в обработке
+- `approved` - Одобренные заказы
+- `handed_over` - Переданы для доставки
+- `delivered` - Доставлены
+- `ready_for_pickup` - Готовы к самовывозу
+- `picked_up` - Выданы при самовывозе
+- `canceled` - Отмененные заказы
+
+Each transition triggers automatic email notifications to customers.
+
+### Admin Components
+
+#### Core Components
+```
+src/components/
+├── AdminPanel.js           # Main admin router and layout  
+├── AdminLogin.js           # Authentication form
+├── AdminLayout.js          # Sidebar navigation layout
+├── Dashboard.js            # Overview statistics and metrics
+├── OrdersTable.js          # Order listing with filters and pagination
+├── OrderStatusModal.js     # Status update interface with email preview
+├── OrderDetailsModal.js    # Detailed order view with full configuration
+└── *.css files            # Component-specific styling with dark theme
+```
+
+#### Services & API
+```
+src/services/
+└── adminAuth.js           # Authentication service with localStorage
+
+src/api/
+└── adminApi.js            # Order management API functions
+```
+
+### Admin Features
+
+#### Authentication
+- **Simple Login** - Username/password authentication (123/123)
+- **Session Persistence** - localStorage-based session management  
+- **Protected Routes** - Automatic redirect to login if not authenticated
+- **Auto Logout** - Session timeout for security
+
+#### Order Management
+- **Complete Order Listing** - Paginated table with sorting and filtering
+- **Status Filtering** - Filter by pending, processing, completed, delivery method
+- **Search Functionality** - Search by customer name, email, or order ID
+- **Date Range Filtering** - Filter orders by creation date
+- **Real-time Updates** - Order list refreshes after status changes
+- **Mobile Responsive** - Optimized for all screen sizes
+
+#### Status Updates
+- **Guided Workflow** - Only show valid next status options based on current status
+- **Delivery Scheduling** - Date and time slot selection for courier deliveries
+- **Admin Notes** - Internal notes for each status change (optional)
+- **Email Preview** - Preview customer notifications before sending
+- **Batch Operations** - Multiple status transitions support
+- **Error Handling** - User-friendly error messages and retry options
+
+#### Advanced Features
+- **Delivery Method Detection** - Automatic workflow routing (courier vs pickup)
+- **Status History** - Complete audit trail with timestamps and admin tracking
+- **Email Integration** - Automatic notifications via MailerSend
+- **Order Configuration** - Full mattress configuration display
+- **Customer Details** - Complete customer and delivery information
+- **Visual Status Indicators** - Color-coded status badges
+
+#### Email System (Enhanced)
+```
+supabase/functions/send-email/
+└── index.ts              # Enhanced Edge Function with all status templates
+```
+
+**Email Templates (Czech Language):**
+- **pending/processing → approved**: Order confirmation with processing status
+- **approved → handed_over**: Delivery scheduling with date and time slot
+- **handed_over → delivered**: Delivery confirmation
+- **approved → ready_for_pickup**: Pickup ready notification
+- **ready_for_pickup → picked_up**: Pickup confirmation
+- **any → canceled**: Order cancellation notification
+
+**Email Features:**
+- HTML and text formats for better compatibility
+- Customer and admin notifications
+- Order details and configuration included
+- Delivery information and tracking
+- Czech localization with proper formatting
+
+#### UI/UX Features
+- **Professional White Theme** - Clean design with excellent readability
+- **Responsive Design** - Mobile-optimized admin interface
+- **Real-time Updates** - Order list refreshes after status changes
+- **Loading States** - Smooth loading indicators and transitions
+- **Error Handling** - User-friendly error messages and retry options
+- **Status Color Coding** - Visual status indicators with consistent colors
+- **Modal System** - Overlay modals for status updates and details
+- **Improved Typography** - Enhanced text contrast and readability
+- **Accessible Design** - High contrast colors and keyboard navigation
+
+### Admin Styling
+- **Modern UI** - Clean white background with professional styling
+- **Sidebar Navigation** - Collapsible sidebar with active state indicators  
+- **Data Tables** - Sortable, filterable, and paginated order listings
+- **Status Badges** - Color-coded status indicators:
+  - `pending` - Yellow (#ffc107)
+  - `processing` - Yellow (#ffc107)  
+  - `approved` - Green (#28a745)
+  - `handed_over` - Blue (#007bff)
+  - `delivered` - Green (#28a745)
+  - `ready_for_pickup` - Cyan (#17a2b8)
+  - `picked_up` - Green (#28a745)
+  - `canceled` - Red (#dc3545)
+- **Improved Contrast** - Fixed text readability issues with proper color variables
+
+### Development Notes
+
+#### Adding New Status
+1. Add status constant to `ORDER_STATUSES` in `src/api/adminApi.js`
+2. Add Czech label to `STATUS_LABELS` object
+3. Update status transition logic in `getAvailableStatusTransitions()`
+4. Add email template to `supabase/functions/send-email/index.ts`
+5. Update status colors in `getStatusColor()` functions
+6. Test all transition workflows
+
+#### Extending Admin Features  
+- Admin components use consistent styling patterns with CSS variables
+- All API calls include comprehensive error handling and loading states
+- Email templates support full Czech localization
+- Status workflow is configurable via transition rules
+- Modal forms use proper contrast colors for readability
+- All components are mobile-responsive
+
+#### Recent Bug Fixes
+- ✅ Fixed delivery method constant mismatch ('delivery' vs 'courier')
+- ✅ Added support for 'pending' status from existing orders
+- ✅ Fixed text readability in modals by overriding CSS variables
+- ✅ Improved status transition logic for both delivery types
+- ✅ Enhanced UI with better contrast and typography
+
+#### Deployment Checklist
+1. Deploy updated Edge Function: `supabase functions deploy send-email`
+2. Verify database schema includes all status constants
+3. Test admin authentication and status workflows
+4. Confirm email notifications work for all transitions
+5. Validate responsive design on mobile devices
