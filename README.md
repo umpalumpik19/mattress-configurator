@@ -1,74 +1,107 @@
-<<<<<<< HEAD
-# Getting Started with Create React App
+# Mattress Configurator
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Полнофункциональный конфигуратор матрасов с визуальным превью, корзиной, платежными системами и админ панелью.
 
-## Available Scripts
+## 🚀 Быстрый старт
 
-In the project directory, you can run:
+### Локальная разработка
 
-### `npm start`
+```bash
+# Установка зависимостей
+npm install
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+# Основной сайт (localhost:3000)
+npm start
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+# Админ панель (localhost:3001) 
+npm run start:admin
+```
 
-### `npm test`
+### Переменные окружения (.env)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```env
+REACT_APP_SUPABASE_URL=your_supabase_url
+REACT_APP_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-### `npm run build`
+## 📁 Структура проекта
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+src/
+├── App.js                 # Основной конфигуратор матрасов
+├── components/
+│   ├── AdminPanel.js      # Админ панель (отдельное приложение)
+│   ├── ShoppingCart.js    # Корзина и оформление заказа
+│   └── ...
+├── api/
+│   ├── mattressApi.js     # Supabase интеграция
+│   └── adminApi.js        # Админ API
+└── services/
+    ├── adminAuth.js       # Аутентификация админа
+    ├── emailService.js    # MailerSend интеграция
+    └── paymentStubs.js    # Заглушки платежных систем
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🛠️ Команды
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Разработка
+- `npm start` - Основной сайт (порт 3000)
+- `npm run start:admin` - Админ панель (порт 3001)
 
-### `npm run eject`
+### Сборка
+- `npm run build` - Сборка обеих приложений
+- `npm run build:main` - Только основной сайт
+- `npm run build:admin` - Только админ панель
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 🔑 Доступ к админке
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- **URL**: http://localhost:3001 (разработка)
+- **Логин**: `123`
+- **Пароль**: `123`
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 🚀 Деплой на Vercel
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Основной сайт
+```bash
+Build Command: npm run build:main
+Environment Variables:
+  REACT_APP_ENTRY=main
+  REACT_APP_SUPABASE_URL=...
+  REACT_APP_SUPABASE_ANON_KEY=...
+```
 
-## Learn More
+### Админ панель (отдельный проект)
+```bash
+Build Command: npm run build:admin  
+Environment Variables:
+  REACT_APP_ENTRY=admin
+  REACT_APP_SUPABASE_URL=...
+  REACT_APP_SUPABASE_ANON_KEY=...
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 📋 Возможности
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+✅ **Визуальный конфигуратор** - интерактивный превью матраса  
+✅ **Умная корзина** - управление количеством, дубликатами  
+✅ **Чешские платежи** - Comgate, dobírka, карта, Google Pay  
+✅ **Email уведомления** - через MailerSend (3K писем/месяц)  
+✅ **Админ панель** - управление заказами, статусами  
+✅ **База данных** - Supabase PostgreSQL  
+✅ **Адаптивный дизайн** - мобильные устройства  
 
-### Code Splitting
+## 📖 Документация
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- **[SETUP_GUIDE.md](./SETUP_GUIDE.md)** - Полная инструкция по настройке
+- **[CLAUDE.md](./CLAUDE.md)** - Техническая документация для разработчиков
 
-### Analyzing the Bundle Size
+## 🔧 Технологии
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- **Frontend**: React 19, CSS Grid/Flexbox
+- **Backend**: Supabase (PostgreSQL + Edge Functions)
+- **Email**: MailerSend API
+- **Деплой**: Vercel
+- **Аутентификация**: localStorage + bcrypt
 
-### Making a Progressive Web App
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-=======
-# mattress-configurator
->>>>>>> bbd3908082b8f12c81be97e87b5c2c12d58730c7
+**Для полной настройки смотрите [SETUP_GUIDE.md](./SETUP_GUIDE.md)**

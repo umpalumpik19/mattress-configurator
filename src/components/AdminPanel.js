@@ -65,8 +65,23 @@ const AdminPanel = () => {
 
   console.log('AdminPanel render - loading:', loading, 'isAuthenticated:', isAuthenticated, 'authChecked:', authChecked, 'user:', user);
   
-  // Debug: clear localStorage if needed (remove this after testing)
-  // localStorage.clear();
+  // Force clear any corrupted auth state on first load
+  useEffect(() => {
+    const authData = localStorage.getItem('mattress_admin_auth');
+    if (authData && !authChecked) {
+      try {
+        const parsed = JSON.parse(authData);
+        // If auth data is corrupted or missing required fields, clear it
+        if (!parsed.loginTime || !parsed.username) {
+          console.log('Clearing corrupted auth data');
+          localStorage.removeItem('mattress_admin_auth');
+        }
+      } catch (error) {
+        console.log('Clearing invalid auth data');
+        localStorage.removeItem('mattress_admin_auth');
+      }
+    }
+  }, [authChecked]);
 
   if (loading) {
     return (

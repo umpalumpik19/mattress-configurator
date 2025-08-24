@@ -52,11 +52,11 @@
   padding: 40px 30px 30px;
 }
 
-.form-group {
+.admin-login-form .form-group {
   margin-bottom: 24px;
 }
 
-.form-group label {
+.admin-login-form .form-group label {
   display: block;
   margin-bottom: 8px;
   font-weight: 600;
@@ -64,7 +64,7 @@
   font-size: 14px;
 }
 
-.form-group input {
+.admin-login-form .form-group input {
   width: 100%;
   padding: 14px 16px;
   border: 2px solid #e1e5e9;
@@ -75,13 +75,13 @@
   box-sizing: border-box;
 }
 
-.form-group input:focus {
+.admin-login-form .form-group input:focus {
   outline: none;
   border-color: #0066cc;
   box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
 }
 
-.form-group input:disabled {
+.admin-login-form .form-group input:disabled {
   background-color: #f8f9fa;
   color: #6c757d;
   cursor: not-allowed;

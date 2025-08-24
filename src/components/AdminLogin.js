@@ -97,9 +97,6 @@ const AdminLogin = ({ onLogin }) => {
           </button>
         </form>
 
-        <div className="admin-login-footer">
-          <p>Pro testování: uživatel <strong>123</strong>, heslo <strong>123</strong></p>
-        </div>
       </div>
     </div>
   );

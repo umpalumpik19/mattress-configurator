@@ -20,8 +20,11 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "cross-env REACT_APP_ENTRY=main react-scripts start",
+    "start:admin": "cross-env REACT_APP_ENTRY=admin react-scripts start",
+    "build": "npm run build:main && npm run build:admin",
+    "build:main": "cross-env REACT_APP_ENTRY=main react-scripts build",
+    "build:admin": "cross-env REACT_APP_ENTRY=admin react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -44,6 +47,7 @@
     ]
   },
   "devDependencies": {
+    "cross-env": "^10.0.0",
     "dotenv": "^17.2.1"
   }
 }

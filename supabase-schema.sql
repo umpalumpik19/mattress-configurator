@@ -61,7 +61,40 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
+-- Таблица администраторов
+CREATE TABLE admin_users (
+    id SERIAL PRIMARY KEY,
+    username TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL, -- bcrypt хеш
+    full_name TEXT,
+    email TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    last_login TIMESTAMP WITH TIME ZONE
+);
+
+-- Создание администратора по умолчанию (пароль: 123)
+-- Хеш для пароля '123': $2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy
+INSERT INTO admin_users (username, password, full_name, email) VALUES 
+('123', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'Admin', 'admin@mattress-configurator.com');
+
+-- Таблица истории изменения статусов заказов
+CREATE TABLE order_status_history (
+    id SERIAL PRIMARY KEY,
+    order_id INTEGER REFERENCES orders(id) ON DELETE CASCADE,
+    old_status TEXT,
+    new_status TEXT NOT NULL,
+    changed_by_admin_id INTEGER REFERENCES admin_users(id),
+    notes TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Индексы
+CREATE INDEX idx_admin_users_username ON admin_users(username);
+CREATE INDEX idx_order_status_history_order_id ON order_status_history(order_id);
+
 -- Триггеры для автоматического обновления updated_at
 CREATE TRIGGER update_mattress_layers_updated_at BEFORE UPDATE ON mattress_layers FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_mattress_covers_updated_at BEFORE UPDATE ON mattress_covers FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_orders_updated_at BEFORE UPDATE ON orders FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+CREATE TRIGGER update_admin_users_updated_at BEFORE UPDATE ON admin_users FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();

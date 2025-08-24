@@ -9,8 +9,11 @@ This is a mattress configurator React application that allows users to build cus
 ## Commands
 
 ### Development
-- `npm start` - Start development server (opens on localhost:3000)
-- `npm run build` - Build production bundle
+- `npm start` - Start main configurator app (opens on localhost:3000)
+- `npm run start:admin` - Start admin panel app (opens on localhost:3001)
+- `npm run build` - Build both applications for production
+- `npm run build:main` - Build only main configurator app
+- `npm run build:admin` - Build only admin panel app
 - `npm test` - Run tests in watch mode
 - `npm run eject` - Eject from Create React App (one-way operation)
 
@@ -18,6 +21,23 @@ This is a mattress configurator React application that allows users to build cus
 - `npm test` - Run all tests in interactive watch mode
 - `npm test -- --coverage` - Run tests with coverage report
 - `npm test -- --watchAll=false` - Run tests once without watch mode
+
+### Application Structure
+This project now consists of **two separate React applications**:
+
+1. **Main Configurator App** (`src/App.js`)
+   - Mattress configuration interface
+   - Shopping cart and checkout
+   - Customer-facing features
+   - Entry point: `src/index.js` with `REACT_APP_ENTRY=main`
+
+2. **Admin Panel App** (`src/components/AdminPanel.js`)
+   - Order management system
+   - Authentication and admin features
+   - Status tracking and email notifications
+   - Entry point: `src/index.js` with `REACT_APP_ENTRY=admin`
+
+Both applications share the same codebase but load different components based on the `REACT_APP_ENTRY` environment variable.
 
 ## Architecture
 
@@ -214,8 +234,9 @@ src/api/
 Complete admin dashboard for order management with authentication, status tracking, and email notifications. Built with React Router and modern UI components.
 
 ### Access
-- **URL**: `/admin` 
-- **Login**: 123 / 123
+- **Development**: `npm run start:admin` (runs on localhost:3001)
+- **Production**: Separate Vercel deployment for admin panel
+- **Login**: 123 / 123 (configurable in database)
 - **Features**: Order management, status updates, email notifications, responsive design
 
 ### Database Tables
@@ -397,3 +418,117 @@ supabase/functions/send-email/
 3. Test admin authentication and status workflows
 4. Confirm email notifications work for all transitions
 5. Validate responsive design on mobile devices
+
+## Deployment Guide
+
+### Main Site Deployment (Vercel)
+1. Connect GitHub repository to Vercel
+2. Set build command: `npm run build:main`
+3. Set output directory: `build`
+4. Add environment variables:
+   - `REACT_APP_ENTRY=main`
+   - `REACT_APP_SUPABASE_URL`
+   - `REACT_APP_SUPABASE_ANON_KEY`
+
+### Admin Panel Deployment (Separate Vercel Project)
+1. **Create New Vercel Project**:
+   - Import the same GitHub repository
+   - Use a different project name (e.g., `mattress-admin`)
+
+2. **Build Settings**:
+   - Build Command: `npm run build:admin`
+   - Output Directory: `build`
+   - Install Command: `npm install`
+
+3. **Environment Variables**:
+   ```
+   REACT_APP_ENTRY=admin
+   REACT_APP_SUPABASE_URL=your_supabase_url
+   REACT_APP_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
+
+4. **Domain Configuration**:
+   - Main site: `your-domain.com`
+   - Admin panel: `admin.your-domain.com` or separate domain
+
+### Changing Admin Password
+
+#### Method 1: Using Password Generator Script (Recommended)
+1. Edit `generate-password-hash.js` and change the password on line 4:
+   ```javascript
+   const newPassword = 'your_new_password_here';
+   ```
+2. Run the script:
+   ```bash
+   node generate-password-hash.js
+   ```
+3. Copy the generated SQL command and execute it in Supabase Dashboard → SQL Editor
+4. Clear localStorage in browser (DevTools → Application → Local Storage → delete `mattress_admin_auth`)
+5. Login with new password
+
+#### Method 2: Interactive Password Change
+1. Run the interactive utility:
+   ```bash
+   node change-admin-password.js
+   ```
+2. Enter your new password when prompted
+3. Copy the generated SQL command to Supabase Dashboard
+4. Clear browser localStorage
+5. Login with new password
+
+#### Method 3: Direct SQL Update
+1. Generate bcrypt hash using any online bcrypt generator (use cost factor 10)
+2. Execute in Supabase Dashboard → SQL Editor:
+   ```sql
+   UPDATE admin_users 
+   SET password_hash = '$2b$10$your_new_bcrypt_hash_here'
+   WHERE username = '123';
+   ```
+3. Clear browser localStorage
+4. Login with new password
+
+**Important Notes:**
+- Always use bcrypt hash format `$2b$10$...` (not `$2a$`)
+- Clear localStorage after password change
+- The password field in database is called `password_hash` (not `password`)
+- Current login is `123` / `123` - change both username and password as needed
+
+### GitHub Actions (Optional)
+Create `.github/workflows/deploy.yml` for automated deployments:
+
+```yaml
+name: Deploy Applications
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy-main:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Deploy Main to Vercel
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_MAIN }}
+          
+  deploy-admin:
+    runs-on: ubuntu-latest  
+    steps:
+      - uses: actions/checkout@v2
+      - name: Deploy Admin to Vercel
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_ADMIN }}
+```
+
+### Security Considerations
+- **Admin Panel**: Deploy on separate subdomain with restricted access
+- **Environment Variables**: Never commit sensitive data to repository
+- **Authentication**: Consider implementing JWT tokens for production
+- **HTTPS**: Ensure both applications use SSL certificates
+- **Database Access**: Use row-level security in Supabase for admin operations

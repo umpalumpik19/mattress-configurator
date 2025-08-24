@@ -80,7 +80,7 @@
 }
 
 /* Order Summary */
-.order-summary {
+.status-modal .order-summary {
   background: #f8f9fa;
   padding: 20px;
   border-radius: 8px;
@@ -90,13 +90,13 @@
   gap: 12px;
 }
 
-.summary-item {
+.status-modal .order-summary .summary-item {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.summary-item strong {
+.status-modal .order-summary .summary-item strong {
   color: #6c757d;
   font-size: 12px;
   text-transform: uppercase;
@@ -104,7 +104,7 @@
   font-weight: 600;
 }
 
-.summary-item {
+.status-modal .order-summary .summary-item {
   color: #2c2c54;
   font-weight: 500;
 }
@@ -115,11 +115,11 @@
 }
 
 /* Form Groups */
-.form-group {
+.status-modal .form-group {
   margin-bottom: 24px;
 }
 
-.form-group label {
+.status-modal .form-group label {
   display: block;
   margin-bottom: 8px;
   font-weight: 600;
@@ -384,7 +384,7 @@ textarea:focus {
     flex-direction: column;
   }
   
-  .order-summary {
+  .status-modal .order-summary {
     grid-template-columns: 1fr;
     gap: 16px;
   }

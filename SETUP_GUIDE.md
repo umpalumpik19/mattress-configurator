@@ -9,7 +9,16 @@
 ✅ **MailerSend email уведомления** (3000 писем/месяц бесплатно)  
 ✅ **Чешские платежные системы** (Comgate, dobírka, карта, Google Pay)  
 ✅ **Красивую корзину и оформление заказа**  
-✅ **Админ панель** для просмотра заказов в Supabase  
+✅ **Отдельную админ панель** для управления заказами
+
+## 🔧 Архитектура приложения
+
+Проект состоит из **двух отдельных React приложений**:
+
+1. **Основной сайт** - конфигуратор матрасов для клиентов
+2. **Админ панель** - управление заказами для администраторов
+
+Оба приложения используют общий код, но запускаются и деплоятся отдельно.  
 
 ---
 
@@ -125,13 +134,21 @@ REACT_APP_SUPABASE_ANON_KEY=your-anon-key-here
 - Supabase Dashboard → Settings → API
 - URL и anon public key
 
-### 3.3 Запуск приложения
+### 3.3 Запуск приложений
 
+**Основной сайт (конфигуратор):**
 ```bash
 npm start
 ```
-
 **Откроется http://localhost:3000** ✅
+
+**Админ панель:**
+```bash
+npm run start:admin
+```
+**Откроется http://localhost:3001** ✅
+
+**Или запустите оба одновременно в разных терминалах**
 
 ---
 
@@ -161,9 +178,47 @@ npm start
 
 ---
 
-## 🚀 Шаг 5: Деплой на Vercel (опционально)
+## 👨‍💼 Шаг 5: Тестирование админ панели
 
-### 5.1 Создание GitHub репозитория
+### 5.1 Запуск админ панели
+
+```bash
+npm run start:admin
+```
+
+### 5.2 Вход в админку
+
+1. **Откройте http://localhost:3001**
+2. **Введите логин и пароль:** `123` / `123`
+3. **Нажмите "Войти"**
+
+### 5.3 Функции админки
+
+✅ **Dashboard** - общая статистика заказов  
+✅ **Заказы** - список всех заказов с фильтрами  
+✅ **Изменение статусов** - с автоматическими email уведомлениями  
+✅ **Детали заказов** - полная информация о конфигурации матраса  
+✅ **Адаптивный дизайн** - работает на мобильных устройствах  
+
+### 5.4 Смена пароля админа
+
+**Вариант 1: Через базу данных (рекомендуется)**
+1. **Supabase Dashboard** → **Table Editor** → **admin_users**
+2. **Найдите строку с username = '123'**
+3. **Измените поле password** на новый bcrypt хеш
+4. **Сохранить изменения**
+
+**Вариант 2: Через код**
+1. **Откройте `src/services/adminAuth.js`**
+2. **Найдите функцию login**
+3. **Измените проверку credentials**
+4. **Перезапустите админ панель**
+
+---
+
+## 🚀 Шаг 6: Деплой на Vercel
+
+### 6.1 Создание GitHub репозитория
 
 **Если у вас еще нет аккаунта GitHub:**
 1. **Регистрируйтесь на https://github.com**
@@ -175,7 +230,7 @@ npm start
 3. **Поставьте галочку "Add a README file"**
 4. **Нажмите "Create repository"**
 
-### 5.2 Подготовка локального проекта
+### 6.2 Подготовка локального проекта
 
 **В терминале в папке проекта выполните по очереди:**
 
@@ -190,7 +245,7 @@ git add .
 git commit -m "Initial commit with full backend"
 
 # 4. Указываем адрес вашего GitHub репозитория
-git remote add origin https://github.com/umpalumpik19/mattress-configurator.git
+git remote add origin https://github.com/YOUR_USERNAME/mattress-configurator.git
 
 # 5. Отправляем код на GitHub
 git push -u origin main
@@ -208,21 +263,55 @@ git push -u origin main
 2. **Generate new token** → **repo** права → **Generate token**
 3. **Скопируйте токен** и используйте как пароль
 
-### 5.3 Деплой на Vercel
+### 6.3 Деплой основного сайта
 
 1. **Регистрируйтесь на https://vercel.com через GitHub**
 2. **После входа нажмите "Add New" → "Project"** 
 3. **Найдите ваш репозиторий `mattress-configurator`**
 4. **Нажмите "Import"**
+5. **Настройте Build & Development Settings:**
+   - Build Command: `npm run build:main`
+   - Output Directory: `build`
+   - Install Command: `npm install`
+6. **В разделе Environment Variables добавьте:**
+   - Name: `REACT_APP_ENTRY`, Value: `main`
+   - Name: `REACT_APP_SUPABASE_URL`, Value: ваш Supabase URL
+   - Name: `REACT_APP_SUPABASE_ANON_KEY`, Value: ваш Supabase ключ
+7. **Нажмите "Deploy"**
+8. **Дождитесь деплоя** (2-3 минуты)
+
+✅ **Основной сайт будет доступен по ссылке: `https://mattress-configurator-xxx.vercel.app`**
+
+### 6.4 Деплой админ панели (отдельный проект)
+
+1. **В Vercel нажмите "Add New" → "Project"**
+2. **Снова выберите тот же репозиторий `mattress-configurator`**
+3. **Дайте проекту другое имя:** `mattress-admin`
+4. **Настройте Build & Development Settings:**
+   - Build Command: `npm run build:admin`
+   - Output Directory: `build`
+   - Install Command: `npm install`
 5. **В разделе Environment Variables добавьте:**
+   - Name: `REACT_APP_ENTRY`, Value: `admin`
    - Name: `REACT_APP_SUPABASE_URL`, Value: ваш Supabase URL
    - Name: `REACT_APP_SUPABASE_ANON_KEY`, Value: ваш Supabase ключ
 6. **Нажмите "Deploy"**
-7. **Дождитесь деплоя** (2-3 минуты)
 
-✅ **Ваш сайт будет доступен по ссылке вида: `https://mattress-configurator-xxx.vercel.app`**
+✅ **Админ панель будет доступна по ссылке: `https://mattress-admin-xxx.vercel.app`**
 
-### 5.4 Обновление сайта в будущем
+### 6.5 Настройка доменов (опционально)
+
+**После деплоя вы можете настроить пользовательские домены:**
+
+1. **Основной сайт:** `your-domain.com`
+2. **Админ панель:** `admin.your-domain.com`
+
+**Настройка в Vercel:**
+1. **Settings** → **Domains**
+2. **Add Domain**
+3. **Следуйте инструкциям по настройке DNS**
+
+### 6.6 Обновление сайтов в будущем
 
 **Когда захотите внести изменения:**
 
@@ -236,10 +325,12 @@ git commit -m "Описание что изменили"
 # 3. Отправляем на GitHub
 git push
 
-# 4. Vercel автоматически обновит сайт!
+# 4. Vercel автоматически обновит ОБА сайта!
 ```
 
-**Vercel подключен к GitHub** - любые изменения в репозитории автоматически деплоятся на сайт!
+**Vercel подключен к GitHub** - любые изменения в репозитории автоматически деплоятся на оба сайта:
+- ✅ Основной сайт (с `REACT_APP_ENTRY=main`)
+- ✅ Админ панель (с `REACT_APP_ENTRY=admin`)
 
 ---
 
@@ -302,8 +393,9 @@ git push
 ### Для продакшена:
 1. **Настройте свой домен** в MailerSend
 2. **Интегрируйте реальные платежи** (Comgate, Stripe)
-3. **Создайте админ панель** для управления заказами
+3. **Настройте безопасность админ панели** (смена пароля, JWT токены)
 4. **Добавьте аналитику** (Google Analytics)
+5. **Настройте мониторинг** (Sentry для ошибок)
 
 ### Лимиты бесплатных планов:
 - **Supabase:** 500MB база, 2GB трафик

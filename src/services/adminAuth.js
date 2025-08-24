@@ -1,6 +1,5 @@
 import React from 'react';
 import { supabase } from '../supabaseClient';
-import bcrypt from 'bcryptjs';
 
 const AUTH_STORAGE_KEY = 'mattress_admin_auth';
 
@@ -18,6 +17,13 @@ export class AdminAuthService {
       if (authData) {
         const parsed = JSON.parse(authData);
         console.log('loadAuthState - parsed data:', parsed);
+        
+        // Check if we have required fields
+        if (!parsed.loginTime || !parsed.username) {
+          console.log('loadAuthState - invalid auth data structure, clearing');
+          this.clearAuthState();
+          return null;
+        }
         
         // Check if token is expired (simple check - 24 hours)
         const now = new Date().getTime();
@@ -59,38 +65,83 @@ export class AdminAuthService {
   // Login with username and password
   async login(username, password) {
     try {
-      console.log('Attempting login with:', { username, password });
       
-      // For testing purposes, we'll use simple hardcoded auth
-      // In production, this would authenticate against the admin_users table
-      if (username === '123' && password === '123') {
-        const user = {
-          id: '1',
-          username: '123',
-          fullName: 'Test Admin',
-          email: 'admin@mattress-configurator.com'
-        };
-        
-        console.log('Login successful, saving user:', user);
-        this.saveAuthState(user);
-        console.log('Auth state saved, current user:', this.getCurrentUser());
-        
-        // Update last login in database (optional for testing)
-        try {
-          await supabase
-            .from('admin_users')
-            .update({ last_login: new Date().toISOString() })
-            .eq('username', username);
-        } catch (dbError) {
-          // Don't fail login if database update fails
-          console.warn('Failed to update last login:', dbError);
-        }
-        
-        return { success: true, user };
-      } else {
-        console.log('Login failed: incorrect credentials');
+      // Authenticate against the admin_users table
+      const { data: adminUsers, error } = await supabase
+        .from('admin_users')
+        .select('*')
+        .eq('username', username)
+        .limit(1);
+
+      if (error) {
+        console.error('Database error during login:', error);
+        return { success: false, error: 'Chyba databáze při přihlašování' };
+      }
+
+      if (!adminUsers || adminUsers.length === 0) {
         return { success: false, error: 'Nesprávné přihlašovací údaje' };
       }
+
+      const adminUser = adminUsers[0];
+      
+      // For now, do simple password comparison (you can upgrade to bcrypt later)
+      // If the password in DB starts with $2a$ or $2b$, it's a bcrypt hash
+      let passwordMatch = false;
+      
+      if (adminUser.password_hash.startsWith('$2a$') || adminUser.password_hash.startsWith('$2b$')) {
+        // It's a bcrypt hash - call the Edge Function
+        try {
+          const { data: authResult, error: authError } = await supabase.functions.invoke('verify-admin-password', {
+            body: { 
+              hashedPassword: adminUser.password_hash, 
+              plainPassword: password 
+            }
+          });
+          
+          if (authError) {
+            console.error('Edge function error:', authError);
+            // Fallback to basic comparison if Edge Function fails
+            passwordMatch = adminUser.password_hash === password;
+          } else {
+            passwordMatch = authResult?.isValid || false;
+          }
+        } catch (err) {
+          console.error('Edge function call failed:', err);
+          // Fallback to basic comparison
+          passwordMatch = adminUser.password_hash === password;
+        }
+      } else {
+        // Plain text password comparison
+        passwordMatch = adminUser.password_hash === password;
+      }
+      
+      if (!passwordMatch) {
+        return { success: false, error: 'Nesprávné přihlašovací údaje' };
+      }
+
+      // Login successful
+      const user = {
+        id: adminUser.id,
+        username: adminUser.username,
+        fullName: adminUser.full_name || 'Admin',
+        email: adminUser.email || 'admin@mattress-configurator.com'
+      };
+      
+      this.saveAuthState(user);
+      
+      // Update last login in database
+      try {
+        await supabase
+          .from('admin_users')
+          .update({ last_login: new Date().toISOString() })
+          .eq('id', adminUser.id);
+      } catch (dbError) {
+        // Don't fail login if database update fails
+        console.warn('Failed to update last login:', dbError);
+      }
+      
+      return { success: true, user };
+
     } catch (error) {
       console.error('Login error:', error);
       return { success: false, error: 'Chyba při přihlašování' };
@@ -150,12 +201,9 @@ export const useAdminAuth = () => {
   const login = async (username, password) => {
     setLoading(true);
     try {
-      console.log('Hook login called with:', { username, password });
       const result = await adminAuth.login(username, password);
-      console.log('Login result:', result);
       
       if (result.success) {
-        console.log('Setting user and auth state:', result.user);
         setUser(result.user);
         setAuthState(true);
       }

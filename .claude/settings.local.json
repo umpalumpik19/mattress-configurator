@@ -1,5 +1,11 @@
 {
   "permissions": {
+    "allow": [
+      "Bash(taskkill:*)",
+      "Bash(tskill:*)",
+      "Bash(cmd /c:*)",
+      "Bash(git add:*)"
+    ],
     "defaultMode": "acceptEdits"
   }
 }
