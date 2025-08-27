@@ -9,6 +9,7 @@ import React, {
 } from 'react';
 import './App.css';
 import ShoppingCart from './components/ShoppingCart';
+import Footer from './components/Footer';
 import { getMattressLayers, getMattressCovers, transformLayersData, transformCoversData } from './api/mattressApi';
 
 /** ---------- Константы и утилиты ---------- */
@@ -1095,6 +1096,9 @@ const App = () => {
         onClearCart={() => setCartItems([])}
         totalPrice={cartTotal}
       />
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };

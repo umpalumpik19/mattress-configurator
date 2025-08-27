@@ -1,0 +1,58 @@
+{
+  "columns": [
+    {
+      "id": "homepage",
+      "title": "ÚVODNÍ STRANA",
+      "links": [
+        { "text": "O nás", "url": "/o-nas" },
+        { "text": "Matrace dle rozměru", "url": "/matrace-dle-rozmeru" },
+        { "text": "Eshop matrace", "url": "/eshop-matrace" },
+        { "text": "Kontakt", "url": "/kontakt" },
+        { "text": "FAQ", "url": "/faq" },
+        { "text": "Video", "url": "/video" },
+        { "text": "Spolupráce", "url": "/spoluprace" },
+        { "text": "Globální přímo", "url": "/globalni-primo" }
+      ]
+    },
+    {
+      "id": "help",
+      "title": "HELP",
+      "links": [
+        { "text": "Nová registrace", "url": "/nova-registrace" },
+        { "text": "Obchodní podmínky", "url": "/obchodni-podminky" },
+        { "text": "Politika Cookies", "url": "/politika-cookies" },
+        { "text": "Ochrana osobních údajů", "url": "/ochrana-osobnich-udaju" },
+        { "text": "Jak nakupovat", "url": "/jak-nakupovat" },
+        { "text": "Doprava a platba", "url": "/doprava-a-platba" },
+        { "text": "Osobní odběr v Praze", "url": "/osobni-odber-v-praze" },
+        { "text": "Sledování zásilky", "url": "/sledovani-zasilky" },
+        { "text": "Záruka Vitafoam, výměna a reklamace zboží", "url": "/zaruka-vitafoam-vymena-reklamace" },
+        { "text": "Návod k obsluze matrace Natura", "url": "/navod-k-obsluze-matrace-natura" }
+      ]
+    },
+    {
+      "id": "blog",
+      "title": "BLOG. PROČ NATURA?",
+      "links": [
+        { "text": "Montáž matrací bez lepidla", "url": "/montaz-matraci-bez-lepidla" },
+        { "text": "Výhody Natura", "url": "/vyhody-natura" },
+        { "text": "Proč frost matrace bez lepidla", "url": "/proc-frost-matrace-bez-lepidla" },
+        { "text": "Kontaminované a toxické látky", "url": "/kontaminovane-toxicke-latky" },
+        { "text": "Je mytus o uvolňování chemických výparů a plynů?", "url": "/mytus-uvolnovani-chemickych-vyparu-plynu" },
+        { "text": "Seznam chemických látek", "url": "/seznam-chemickych-latek" },
+        { "text": "Parfény a dezodorany", "url": "/parfemy-dezodorany" },
+        { "text": "Vlastnosti Pocket Spring", "url": "/vlastnosti-pocket-spring" },
+        { "text": "7 ortopedických", "url": "/7-ortopedickych" }
+      ]
+    }
+  ],
+  "companyInfo": {
+    "websites": [
+      "www.matrace-natura.cz",
+      "www.matrace-natura.com"
+    ],
+    "trademark": "© MATTRESS NATURA",
+    "additionalText": "© MATRACE NATURA",
+    "subtitle": "Všechna práva vyhrazena"
+  }
+}

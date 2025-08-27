@@ -1,0 +1,153 @@
+/* Footer Styles */
+.site-footer {
+  background-color: #1a1a1a;
+  color: #ffffff;
+  padding: 40px 0 20px 0;
+  margin-top: 60px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.footer-columns {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+  align-items: flex-start;
+}
+
+.footer-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-column-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 12px 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.footer-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.footer-link-item {
+  margin-bottom: 4px;
+}
+
+.footer-link {
+  color: #b8b8b8;
+  text-decoration: none;
+  font-size: 11px;
+  line-height: 1.4;
+  transition: color 0.2s ease;
+  display: block;
+}
+
+.footer-link:hover {
+  color: #ffffff;
+}
+
+/* Company info column styling */
+.footer-company {
+  color: #b8b8b8;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.footer-website {
+  margin-bottom: 2px;
+  font-weight: 400;
+  color: #b8b8b8;
+}
+
+.footer-trademark {
+  margin: 8px 0 2px 0;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.footer-additional {
+  margin-bottom: 2px;
+  font-weight: 400;
+}
+
+.footer-subtitle {
+  font-size: 11px;
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .footer-columns {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+  }
+  
+  .site-footer {
+    padding: 40px 0 20px 0;
+    margin-top: 60px;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-columns {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  
+  .footer-container {
+    padding: 0 15px;
+  }
+  
+  .site-footer {
+    padding: 30px 0 20px 0;
+    margin-top: 40px;
+  }
+  
+  .footer-column-title {
+    font-size: 16px;
+    margin-bottom: 15px;
+  }
+  
+  .footer-link {
+    font-size: 15px;
+    padding: 2px 0;
+  }
+  
+  .footer-link-item {
+    margin-bottom: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .site-footer {
+    margin-top: 20px;
+    padding: 25px 0 15px 0;
+  }
+  
+  .footer-container {
+    padding: 0 10px;
+  }
+  
+  .footer-columns {
+    gap: 25px;
+  }
+}
+
+/* Dark theme integration */
+@media (prefers-color-scheme: dark) {
+  .site-footer {
+    border-top: 1px solid #404066;
+  }
+}
