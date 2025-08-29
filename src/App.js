@@ -10,6 +10,7 @@ import React, {
 import './App.css';
 import ShoppingCart from './components/ShoppingCart';
 import Footer from './components/Footer';
+import FloatingMattress from './components/FloatingMattress';
 import { getMattressLayers, getMattressCovers, transformLayersData, transformCoversData } from './api/mattressApi';
 
 /** ---------- Константы и утилиты ---------- */
@@ -1095,6 +1096,16 @@ const App = () => {
         onRemoveItem={handleRemoveItem}
         onClearCart={() => setCartItems([])}
         totalPrice={cartTotal}
+      />
+
+      {/* Floating Mattress */}
+      <FloatingMattress
+        selectedSize={selectedSize}
+        selectedHeight={selectedHeight}
+        selectedOptions={selectedOptions}
+        getSelectedItemData={getSelectedItemData}
+        visibleKeys={visibleKeys}
+        sizeKind={sizeKind}
       />
 
       {/* Footer */}

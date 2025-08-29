@@ -1,5 +1,10 @@
 {
   "permissions": {
+    "allow": [
+      "Read(c:\\Users\\boris\\Изображения\\Снимки экрана/**)",
+      "Read(c:\\Users\\boris\\Изображения\\Снимки экрана/**)",
+      "Read(c:\\Users\\boris\\Изображения\\Снимки экрана/**)"
+    ],
     "defaultMode": "acceptEdits"
   }
 }

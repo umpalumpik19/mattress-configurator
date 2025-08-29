@@ -1,12 +1,11 @@
 import { supabase } from '../supabaseClient';
 
-// SendGrid через Supabase Edge Function
+// MailerSend через Supabase Edge Function
 const SUPABASE_FUNCTION_URL = `${process.env.REACT_APP_SUPABASE_URL}/functions/v1/send-email`;
 
-// Инициализация (больше не нужна для SendGrid)
+// Инициализация (больше не нужна для MailerSend)
 export const initEmailJS = () => {
-  // Заглушка для совместимости - SendGrid инициализации не требует
-  console.log('Using SendGrid via Supabase Edge Function');
+  // Заглушка для совместимости - MailerSend инициализации не требует
 };
 
 // Отправка подтверждения заказа клиенту
