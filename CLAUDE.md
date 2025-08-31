@@ -207,3 +207,48 @@ src/api/
 - **Modern Buttons** - Gradient backgrounds with hover effects
 - **Custom Radio Buttons** - Styled with accent colors
 - **Mobile Responsive** - Adaptive layouts for all screen sizes
+
+## Fixed Bottom Bar with Layer Breakdown
+
+### Enhanced Bottom Bar Functionality
+
+**Fixed bottom bar** теперь имеет расширенную функциональность с детализацией слоев:
+
+#### Core Features
+- **Always Visible** - Фиксированный блок внизу экрана постоянно виден на всех устройствах
+- **Smart Layer Breakdown** - Детализация слоев появляется когда калькулятор цены скрыт из видимости
+- **IntersectionObserver Integration** - Автоматическое отслеживание видимости прайс-калькулятора
+- **Smooth Animations** - Плавные анимации появления/исчезновения детализации (0.4s transitions)
+- **Dynamic Height** - Адаптивная высота блока в зависимости от количества видимых слоев
+
+#### Layer Breakdown Structure
+- **3-Column Layout**: "Слой X" | "Название наполнителя" | "Цена слоя"
+- **Dynamic Rows** - Количество строк зависит от выбранной высоты матраса (10см=1 слой, 20см=2 слоя, 30см=3 слоя)
+- **Word Wrapping** - Автоматические переносы для длинных названий материалов
+- **Responsive Grid** - Адаптивные пропорции колонок для разных экранов
+
+#### Responsive Design
+- **Desktop (>1101px)**: 80px | 1fr | 90px grid columns
+- **Mobile (<600px)**: 65px | 1fr | 75px grid columns  
+- **Small Mobile (<420px)**: 55px | 1fr | 65px grid columns
+- **Adaptive Typography** - Размеры шрифтов масштабируются для каждого брейкпоинта
+
+#### Implementation Details
+```javascript
+// IntersectionObserver configuration
+threshold: 0.3,        // 30% калькулятора должно быть видимо
+rootMargin: '-20px'    // Отступ для плавного срабатывания
+```
+
+#### CSS Classes
+- `.bb-breakdown` - Контейнер детализации с анимациями
+- `.bb-breakdown.visible` - Активное состояние (показано)
+- `.bb-breakdown-row` - Строка с информацией о слое
+- `.bb-layer-title` - Название слоя ("Слой 1", "Слой 2", etc.)
+- `.bb-layer-name` - Название материала/наполнителя
+- `.bb-layer-price` - Цена слоя в формате "X XXX Kč"
+
+#### Visibility Logic
+- **Calculator Visible** → Показывается только цена и кнопка
+- **Calculator Hidden** → Дополнительно показывается детализация слоев сверху
+- **Adaptive Padding** → Автоматическая корректировка отступов страницы (64px → 150px)

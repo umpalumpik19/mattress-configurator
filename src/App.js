@@ -298,6 +298,9 @@ const App = () => {
   const [cartItems, setCartItems] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
+  // Calculator visibility state for bottom bar breakdown
+  const [isCalculatorVisible, setIsCalculatorVisible] = useState(true);
+
   const isMobile = useIsMobile(1100);
   const priceCalcRef = useRef(null);
   const selectorsTopRef = useRef(null);
@@ -549,6 +552,28 @@ const App = () => {
   useLayoutEffect(() => {
     scheduleRecalc();
   }, [configData, selectedOptions, selectedHeight, isMobile, scheduleRecalc]);
+
+  // Отслеживание видимости калькулятора цены с помощью IntersectionObserver
+  useEffect(() => {
+    if (!priceCalcRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        setIsCalculatorVisible(entry.isIntersecting);
+      },
+      { 
+        threshold: 0.3, // 30% элемента должно быть видимо
+        rootMargin: '-20px' // Отступ для более раннего срабатывания
+      }
+    );
+
+    observer.observe(priceCalcRef.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [configData]); // Пересоздаем при загрузке данных
 
   // Ресайз/загрузка/догрузка картинок + изменения контейнера
   useEffect(() => {
@@ -929,9 +954,9 @@ const App = () => {
           />
         </div>
 
-        {/* Калькулятор — sticky на десктопе */}
-        <aside className="sidebar" ref={priceCalcRef}>
-          <div className="price-calculator glass-panel">
+        {/* Калькулятор для мобильных/планшетов - в потоке страницы */}
+        {isMobile && (
+          <div className="price-calculator glass-panel" ref={priceCalcRef}>
             <div className="price-header">
               <span className="price-label">Цена и подробности</span>
               <div className="price-amount">
@@ -994,7 +1019,7 @@ const App = () => {
               Добавить в корзину
             </button>
           </div>
-        </aside>
+        )}
 
         {/* Блоки описания слоёв и информации */}
         <section className="details glass-panel">
@@ -1071,21 +1096,41 @@ const App = () => {
         </section>
       </div>
 
-      {/* Постоянный нижний блок с ценой */}
+      {/* Нижний блок с ценой - только для мобильных устройств */}
+      {isMobile && (
       <div className="bottom-bar" role="region" aria-label="Итоговая цена">
-        <div className="bb-price">
-          <span className="bb-value">
-            {totalPrice.toLocaleString('ru-RU')}
-          </span>
-          <span className="bb-currency">Kč</span>
+        {/* Детализация слоев - показывается только когда калькулятор не виден */}
+        <div className={`bb-breakdown ${!isCalculatorVisible ? 'visible' : ''}`}>
+          {visibleKeys.map((key) => {
+            const item = getSelectedItemData(key, selectedOptions[key]);
+            return (
+              <div key={key} className="bb-breakdown-row">
+                <span className="bb-layer-title">{LAYER_TITLES[key]}</span>
+                <span className="bb-layer-name">{item?.name || '-'}</span>
+                <span className="bb-layer-price">
+                  {item?.price ? `${item.price.toLocaleString('ru-RU')} Kč` : ''}
+                </span>
+              </div>
+            );
+          })}
         </div>
 
-        <div className="bb-actions">
-          <button className="bb-btn" onClick={scrollToDetails}>
-            Перейти к подробностям
-          </button>
+        <div className="bb-main-row">
+          <div className="bb-price">
+            <span className="bb-value">
+              {totalPrice.toLocaleString('ru-RU')}
+            </span>
+            <span className="bb-currency">Kč</span>
+          </div>
+
+          <div className="bb-actions">
+            <button className="bb-btn" onClick={scrollToDetails}>
+              Перейти к корзине
+            </button>
+          </div>
         </div>
       </div>
+      )}
 
       {/* Shopping Cart Modal */}
       <ShoppingCart
@@ -1107,6 +1152,75 @@ const App = () => {
         visibleKeys={visibleKeys}
         sizeKind={sizeKind}
       />
+
+      {/* Floating Calculator */}
+      {!isMobile && (
+        <div className="floating-calculator">
+          <div className="price-calculator glass-panel">
+            <div className="price-header">
+              <span className="price-label">Цена и подробности</span>
+              <div className="price-amount">
+                <span className="price-value">
+                  {totalPrice.toLocaleString('ru-RU')}
+                </span>
+                <span className="price-currency">Kč</span>
+              </div>
+            </div>
+
+            <div className="price-breakdown">
+              <div className="price-row">
+                <span>Высота</span>
+                <span>{selectedHeight} см</span>
+                <span className="price-col" />
+              </div>
+              <div className="price-row">
+                <span>Размер</span>
+                <span>{selectedSize}</span>
+                <span className="price-col" />
+              </div>
+
+              {visibleKeys.map((key) => {
+                const item = getSelectedItemData(
+                  key,
+                  selectedOptions[key],
+                );
+                return (
+                  <div key={key} className="price-row">
+                    <span>{LAYER_TITLES[key]}</span>
+                    <span>{item?.name || '-'}</span>
+                    <span className="price-col">
+                      {item?.price
+                        ? `${item.price.toLocaleString('ru-RU')} Kč`
+                        : ''}
+                    </span>
+                  </div>
+                );
+              })}
+
+              <div className="price-row">
+                <span>Чехол</span>
+                <span>
+                  {getSelectedItemData('potah', selectedOptions['potah'])
+                    ?.name || '-'}
+                </span>
+                <span className="price-col">
+                  {getSelectedItemData('potah', selectedOptions['potah'])
+                    ?.price
+                    ? `${getSelectedItemData(
+                        'potah',
+                        selectedOptions['potah'],
+                      ).price.toLocaleString('ru-RU')} Kč`
+                    : ''}
+                </span>
+              </div>
+            </div>
+
+            <button className="add-to-cart-btn" onClick={handleAddToCart}>
+              Добавить в корзину
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Footer */}
       <Footer />

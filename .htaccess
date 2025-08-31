@@ -1,8 +1,22 @@
-  <IfModule mod_rewrite.c>
-  RewriteEngine On
-  RewriteBase /
-  RewriteRule ^index\.html$ - [L]
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule . /index.html [L]
-  </IfModule>
+# Maintenance mode - Redirect all IPs except 176.88.21.86 to maintenance page
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+
+# Skip maintenance for allowed IPs: 176.88.21.86 and 46.135.3.109
+RewriteCond %{REMOTE_ADDR} !^176\.88\.21\.86$
+RewriteCond %{REMOTE_ADDR} !^46\.135\.3\.109$
+RewriteCond %{REQUEST_URI} !^/maintenance\.html$
+RewriteRule ^(.*)$ /maintenance.html [R=503,L]
+
+# Original React routing for allowed IP
+RewriteRule ^index\.html$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.html [L]
+</IfModule>
+
+# Set proper headers for maintenance page
+<Files "maintenance.html">
+    Header always set Retry-After "3600"
+</Files>
