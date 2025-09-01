@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "- Tool pattern: Read(**)\n    - Permission: Allow",
+      "- Tool pattern: Write(**)\n    - Permission: Allow",
+      "- Tool pattern: Edit(**)\n    - Permission: Allow"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

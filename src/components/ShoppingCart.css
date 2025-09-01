@@ -348,21 +348,9 @@
 
 .checkout-btn {
   width: 100%;
-  background: linear-gradient(180deg, color-mix(in oklab, var(--accent) 12%, #0b0b0c) 0%, #0b0b0c 100%);
-  color: #fff;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
   padding: 14px;
   font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all var(--dur) var(--elev);
-}
-
-.checkout-btn:hover {
-  background: linear-gradient(180deg, color-mix(in oklab, var(--accent) 16%, #111113) 0%, #111113 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+  /* Наследует стили от .btn-primary */
 }
 
 /* Checkout Modal */
@@ -654,21 +642,15 @@
 
 .checkout-submit {
   width: 100%;
-  background: linear-gradient(180deg, color-mix(in oklab, var(--accent) 12%, #0b0b0c) 0%, #0b0b0c 100%);
-  color: #fff;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
   padding: 14px;
   font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all var(--dur) var(--elev);
+  /* Наследует стили от .btn-primary */
 }
 
-.checkout-submit:hover {
-  background: linear-gradient(180deg, color-mix(in oklab, var(--accent) 16%, #111113) 0%, #111113 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+.checkout-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
 }
 
 /* Delivery Address Fields */

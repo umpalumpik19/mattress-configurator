@@ -6,120 +6,113 @@
     "additionalBlocks": [
       {
         "id": "latex_about",
-        "title": "Почему латекс",
-        "description": "Латекс долговечен, гипоаллергенен и обладает высокой воздухопроницаемостью.",
+        "title": "Proč latex",
+        "description": "Latex je trvanlivý, hypoalergenní a má vysokou vzdušnou propustnost.",
         "image": "/icons/Latex-Мягкий.webp",
         "order": 101
       }
     ]
   },
   "Latex-Средне-твердый": {
-    "name": "LATEX СРЕДНЕ-ТВЕРДЫЙ",
-    "description": "Баланс поддержки и мягкости. Хорошо распределяет нагрузку, подходит для большинства поз сна.",
+    "name": "PŘÍRODNÍ LATEX • STŘEDNĚ TUHÝ",
+    "description": "Velice elastická pěna Latex má ideální komfort, zvýšenou odolnost a tvarovou stálost. Na rozdíl od běžných polyuretanových pěn má různorodou strukturu buněk, které různě reagují na tlak: při nízkém tlaku působí malé buňky, při vyšším větší a odolnější. Povrch je prodyšnější, lépe kopíruje tělo a zajišťuje pohodlí lidem s různou hmotností — lehčí nepomědi tvrdost, těžší nepropadne.<br><strong>Vlastnosti Latexu:</strong><ul><li>přírodní a ekologický materiál</li><li>změluje matrace (&bdquo;spíte jako na obláčku&ldquo;)</li><li>vynikající propustnost vzduchu, lepší než u polyuretanových a termoelastických pěn</li><li>vysoká odolnost</li><li>žádné deformace ani změny tvrdosti v čase</li></ul>",
     "image": "/icons/Latex-Средне-твердый.webp",
     "additionalBlocks": []
   },
   "Paměťová-pěna-Мягкая": {
-    "name": "PAMĚŤOVÁ PĚNA МЯГКАЯ",
-    "description": "Пена с эффектом памяти мягко обволакивает, снижая точечное давление и улучшая микроциркуляцию.",
+    "name": "PAMĚŤOVÁ PĚNA • MĚKKÁ",
+    "description": "Matrace s efektem tvarové paměti se často nazývají anatomické. Spaní na takové matraci je vhodné pro lidi jakéhokoliv věku, ale nejvíce pro starší lidi: díky materiálu, který se přizpůsobuje tvaru těla, se nebudou zásobovací cévy svírat, což přispívá k správnému prokrvení celého organismu.",
     "image": "/icons/Paměťová-pěna-Мягкая.webp",
     "additionalBlocks": []
   },
   "Paměťová-pěna-Средне-твердая": {
-    "name": "PAMĚŤOVÁ PĚNA СРЕДНЕ-ТВЕРДАЯ",
-    "description": "Более упругая память формы, устойчивость к проседанию, поддержка позвоночника.",
+    "name": "PAMĚŤOVÁ PĚNA • STŘEDNĚ TUHÁ",
+    "description": "Matrace s efektem tvarové paměti se často nazývají anatomické. Spaní na takové matraci je vhodné pro lidi jakéhokoliv věku, ale nejvíce pro starší lidi: díky materiálu, který se přizpůsobuje tvaru těla, se nebudou zásobovací cévy svírat, což přispívá k správnému prokrvení celého organismu.",
     "image": "/icons/Paměťová-pěna-Средне-твердая.webp",
     "additionalBlocks": []
   },
   "Paměťová-pěna-Твердая": {
-    "name": "PAMĚŤOVÁ PĚNA ТВЁРДАЯ",
-    "description": "Максимальная поддержка и стабильность, рекомендовано при необходимости жёсткого ложа.",
+    "name": "PAMĚŤOVÁ PĚNA • TUHÁ",
+    "description": "Matrace s efektem tvarové paměti se často nazývají anatomické. Spaní na takové matraci je vhodné pro lidi jakéhokoliv věku, ale nejvíce pro starší lidi: díky materiálu, který se přizpůsobuje tvaru těla, se nebudou zásobovací cévy svírat, což přispívá k správnému prokrvení celého organismu.",
     "image": "/icons/Paměťová-pěna-Твердая.webp",
     "additionalBlocks": []
   },
   "Pur-Pena-Мягкая": {
-    "name": "PUR PENA МЯГКАЯ",
-    "description": "Классическая мягкая пена: комфортная посадка и базовая вентиляция.",
+    "name": "PUR PĚNA • MĚKKÁ",
+    "description": "Pěna T3040 je nejběžnější typ používaný v matracích a doplňcích pro spánek. Hypoalergenní pěna T3040 má dobrou prodyšnost, nehromadí se v ní prach a nezpůsobuje alergické reakce. Je ekologická, mezinárodní certifikát CertiPUR potvrzuje nezávadnost vyráběných pěn pro člověka i pro životní prostředí. Vysoce kvalitní suroviny a kontrola výroby ve všech fázích, zaručují dlouhou životnost produktů z pěny T3040",
     "image": "/icons/Pur-Pena-Мягкая.webp",
     "additionalBlocks": []
   },
   "Pur-Pena-Средне-твердая": {
-    "name": "PUR PENA СРЕДНЕ-ТВЕРДАЯ",
-    "description": "Популярная упругая пена, сохраняет форму и равномерно распределяет нагрузку.",
+    "name": "PUR PĚNA • STŘEDNĚ TUHÁ",
+    "description": "Pěna T3040 je nejběžnější typ používaný v matracích a doplňcích pro spánek. Hypoalergenní pěna T3040 má dobrou prodyšnost, nehromadí se v ní prach a nezpůsobuje alergické reakce. Je ekologická, mezinárodní certifikát CertiPUR potvrzuje nezávadnost vyráběných pěn pro člověka i pro životní prostředí. Vysoce kvalitní suroviny a kontrola výroby ve všech fázích, zaručují dlouhou životnost produktů z pěny T3040",
     "image": "/icons/Pur-Pena-Средне-твердая.webp",
     "additionalBlocks": []
   },
   "Pur-Pena-Твердая": {
-    "name": "PUR PENA ТВЁРДАЯ",
-    "description": "Жёсткая опора для позвоночника, устойчива к деформациям.",
+    "name": "PUR PĚNA • TUHÁ",
+    "description": "Pěna T3040 je nejběžnější typ používaný v matracích a doplňcích pro spánek. Hypoalergenní pěna T3040 má dobrou prodyšnost, nehromadí se v ní prach a nezpůsobuje alergické reakce. Je ekologická, mezinárodní certifikát CertiPUR potvrzuje nezávadnost vyráběných pěn pro člověka i pro životní prostředí. Vysoce kvalitní suroviny a kontrola výroby ve všech fázích, zaručují dlouhou životnost produktů z pěny T3040",
     "image": "/icons/Pur-Pena-Твердая.webp",
     "additionalBlocks": []
   },
   "Studená-pěna-Мягкая": {
-    "name": "STUDENÁ PĚNA МЯГКАЯ",
-    "description": "Холодная пена с открытыми порами — лучше дышит и отводит влагу.",
+    "name": "STUDENÁ PĚNA • MĚKKÁ",
+    "description": "Velice elastická studená pěna HR40 má ideální komfort, zvýšenou odolnost a tvarovou stálost. Poskytuje podobný efekt jako pružinové matrace, ale bez pocitu prohýbání. Struktura HR pěny je různorodá, buňky mají různé velikosti a reagují na tlak odlišně. Při nízkém tlaku působí malé buňky, jako u měkkého molitanu, při větším tlaku pracují větší buňky s vyšší odolností. Povrch je prodyšnější, lépe kopíruje tělo a zajišťuje pohodlí pro osoby různé hmotnosti – lehčí nepocítí tvrdost, těžší nepropadne. HR pěna se přizpůsobí oběma a rozkládá váhu rovnoměrně. Má vysokou propustnost vzduchu, což brání množení roztočů, mikroorganismů a vzniku plísní. Používá se na ortopedické matrace s životností až 12 let a nosností do 150 kg. Je levnější než latexové matrace při podobné kvalitě. Vzniká lisováním za studena, což zajišťuje vyšší kvalitu a komfort oproti tradičním PUR pěnám.",
     "image": "/icons/Studená-pěna-Мягкая.webp",
     "additionalBlocks": []
   },
   "Studená-pěna-Средне-твердая": {
-    "name": "STUDENÁ PĚNA СРЕДНЕ-ТВЕРДАЯ",
-    "description": "Компромисс между упругостью и комфортом, повышенная долговечность.",
+    "name": "STUDENÁ PĚNA • STŘEDNĚ TUHÁ",
+    "description": "Velice elastická studená pěna HR40 má ideální komfort, zvýšenou odolnost a tvarovou stálost. Poskytuje podobný efekt jako pružinové matrace, ale bez pocitu prohýbání. Struktura HR pěny je různorodá, buňky mají různé velikosti a reagují na tlak odlišně. Při nízkém tlaku působí malé buňky, jako u měkkého molitanu, při větším tlaku pracují větší buňky s vyšší odolností. Povrch je prodyšnější, lépe kopíruje tělo a zajišťuje pohodlí pro osoby různé hmotnosti – lehčí nepocítí tvrdost, těžší nepropadne. HR pěna se přizpůsobí oběma a rozkládá váhu rovnoměrně. Má vysokou propustnost vzduchu, což brání množení roztočů, mikroorganismů a vzniku plísní. Používá se na ortopedické matrace s životností až 12 let a nosností do 150 kg. Je levnější než latexové matrace při podobné kvalitě. Vzniká lisováním za studena, což zajišťuje vyšší kvalitu a komfort oproti tradičním PUR pěnám.",
     "image": "/icons/Studená-pěna-Средне-твердая.webp",
     "additionalBlocks": []
   },
   "Studená-pěna-Твердая": {
-    "name": "STUDENÁ PĚNA ТВЁРДАЯ",
-    "description": "Жёсткая версия холодной пены для максимальной поддержки.",
+    "name": "STUDENÁ PĚNA • TUHÁ",
+    "description": "Velice elastická studená pěna HR40 má ideální komfort, zvýšenou odolnost a tvarovou stálost. Poskytuje podobný efekt jako pružinové matrace, ale bez pocitu prohýbání. Struktura HR pěny je různorodá, buňky mají různé velikosti a reagují na tlak odlišně. Při nízkém tlaku působí malé buňky, jako u měkkého molitanu, při větším tlaku pracují větší buňky s vyšší odolností. Povrch je prodyšnější, lépe kopíruje tělo a zajišťuje pohodlí pro osoby různé hmotnosti – lehčí nepocítí tvrdost, těžší nepropadne. HR pěna se přizpůsobí oběma a rozkládá váhu rovnoměrně. Má vysokou propustnost vzduchu, což brání množení roztočů, mikroorganismů a vzniku plísní. Používá se na ortopedické matrace s životností až 12 let a nosností do 150 kg. Je levnější než latexové matrace při podobné kvalitě. Vzniká lisováním za studena, což zajišťuje vyšší kvalitu a komfort oproti tradičním PUR pěnám.",
     "image": "/icons/Studená-pěna-Твердая.webp",
     "additionalBlocks": []
   },
   "Пружина": {
-    "name": "ПРУЖИНА",
-    "description": "Классический пружинный блок — эластичная поддержка, хорошая вентиляция.",
+    "name": "TASTICOVÉ PRUŽINY • 7 ZÓN",
+    "description": "Nezávislými pružinami • 7 zón<br>Spoj se skládá ze pružin, každá ze kterých se nachází v oddělené textilní části a pracuje nezávisle od druhé. Při nízkém zatížení pracuje pouze část pružin, což zajišťuje dokonalé přizpůsobení tvaru těla v každé zóně. Při velkém zatížení se zapojí všechny pružiny pro dostatečnou podporu.<br><strong>Výhody:</strong><ul><li>Úplná individuální podpora pro každou část těla</li><li>7 zón pro anatomicky správnou podporu</li><li>Rozměrné rozložení zátěže na celé povrch</li><li>Snížení přenášení pohybu mezi zónami</li><li>Vysoká odolnost k deformacím a dlouhodobost</li></ul>",
     "image": "/icons/Пружина.webp",
     "additionalBlocks": []
   },
   "Пружина-кокос": {
-    "name": "ПРУЖИНА • КОКОС",
-    "description": "Комбинация пружин и кокоса добавляет жёсткости и стабилизирует поверхность.",
+    "name": "PRUŽINY + KOKOS • 7 ZÓN",
+    "description": "Pružinná vrstva s rostlinnými a kokosovou proslojkou<br>Spoj se skládá ze zcela oddělených segmentů (kapsle) s nezávislými pružinami, které lze změnit místně a překonfigurovat pro individuální nastavení tuhosti a komfortu v každé zóně. Ona na straně každého segmentu má měkčí polstrování z rostlinných vláken a kokosovou proslojku pro podporu mikroklimatu.<br><strong>Výhody:</strong><ul><li>Individuální nastavení tuhosti a komfortu v každé 7 Zóně</li><li>Účinnost výrazně zvyšuje ventilace a pohlcování vlhkosti získaných používáním</li><li>Rostlinná vlákna a kokos zajišťují antibakteriální vlastnosti a absorbují vůně</li><li>Rozměrné rozložení zátěže a podporu přirozeného polohování páteře</li><li>Dlouhá životnost až 15 let a velmi vysoká mikrohospoda a komfort</li><li>Používání přírodních materiálů, včetně organického kokosového vlákna a potahového kokosového vlákna</li></ul>",
     "image": "/icons/Пружина-кокос.webp",
     "additionalBlocks": []
   },
   "Пружина-хлопковая": {
-    "name": "ПРУЖИНА • ХЛОПКОВАЯ",
-    "description": "Слой хлопка повышает комфорт и улучшает влагообмен.",
+    "name": "PRUŽINY + BAVLNA • 7 ZÓN",
+    "description": "Nezávislými pružinami a bavlněnými čelními • 7 zón<br>Spoj se skládá z nezávislých pružin, každá ze kterých se nachází v individuálním čelní ze 100% přírodní bavlny. Při nízkém zatížení pracuje pouze ta část pružin, která je potřebná, při velkém zatížení se zapojí všechny. Bavlněné čelní zůstává v klíčových polohách. To zajišťuje dokonalou individuální podporu a systém ventilace pro optimální mikroklima.<br><strong>Výhody:</strong><ul><li>Úplná individuální podpora pro každou část těla</li><li>7 zón pro anatomicky správnou podporu</li><li>Rozměrné rozložení zátěže na celé povrch</li><li>Snížení přenášení pohybu mezi zónami</li><li>Vysoká odolnost k deformacím a dlouhodobost</li><li>Používání přírodních bavlněných vláken pro vyšší hygienické vlastnosti</li></ul>",
     "image": "/icons/Пружина-хлопковая.webp",
     "additionalBlocks": []
   },
   "Пружина-хлопковая-кокос": {
-    "name": "ПРУЖИНА • ХЛОПКОВАЯ • КОКОС",
-    "description": "Дополнительная стабилизация и долговечность благодаря кокосу и хлопку.",
+    "name": "PRUŽINY + BAVLNA + KOKOS • 7 ZÓN",
+    "description": "Pružinná vrstva s rostlinnými, kokosovou proslojkou a bavlněnými čelními<br>Spoj se skládá ze zcela oddělených segmentů (kapslí) s nezávislými pružinami, každá ze kterých se nachází v individuálním čelní ze 100% přírodní bavlny. Bavlněné čelní zajišťuje izolaci hluku a rovnoměrné rozložení pro individuální nastavení tuhosti a komfortu v každé zóně. Některé segmenty mají polstrování z rostlinných vláken a kokosovou proslojku pro podporu mikroklimatu.<br><strong>Výhody:</strong><ul><li>Kombinovaná nastavení tuhosti a komfortu v každé 7 zóně</li><li>Bavlněné čelní zajišťuje antibakteriální vlastnosti a absorbuje pachy</li><li>Rovnoměrné rozložení zátěže a podporu přirozeného polohování páteře</li><li>Velmi dlouhá životnost až 15 let a optimální ventilace</li><li>Používání ekologických materiálů</li><li>Lehká údržba a kompletní samostatná nastavitelnost pro optimální komfort</li></ul>",
     "image": "/icons/Пружина-хлопковая-кокос.webp",
     "additionalBlocks": []
   },
   "staticBlocks": [
-    {
-      "id": "warranty",
-      "title": "ГАРАНТИЯ 3 ГОДА",
-      "description": "Расширенная гарантия на материалы и сохранение формы при правильной эксплуатации.",
-      "image": "/logo512.png",
-      "order": 100
-    }
   ],
   "coverDescriptions": {
     "cotton": {
       "title": "POTAH • COTTON",
-      "description": "Хлопковый чехол: мягкий на ощупь, хорошо дышит, легко снимается и стирается.",
+      "description": "Bavlněný potah: měkký na dotek, dobře prodyšný, snadno se odnajímá a pere.",
       "image": "/icons/Хлопок.webp"
     },
     "linen": {
-      "title": "POTAH • LINEN",
-      "description": "Льняной чехол: натуральная текстура, повышенная прочность и влагоотвод.",
+      "title": "POTAH • LEN",
+      "description": "Lnový potah: přirozená struktura, zvýšená odolnost a odvádění vlhkosti.",
       "image": "/icons/Лен.webp"
     },
     "hemp": {
-      "title": "POTAH • HEMP",
-      "description": "Конопляный чехол: очень прочный, естественно антибактериальный и хорошо отводит влагу.",
+      "title": "POTAH • KONOPÍ",
+      "description": "Konopný potah: velmi odolne, přirozeně antibakteriální a dobře odvádí vlhkost.",
       "image": "/icons/Конопля.webp"
     }
   }

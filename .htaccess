@@ -1,16 +1,21 @@
-# Maintenance mode - Redirect all IPs except 176.88.21.86 to maintenance page
+# Only allow configurator URLs - show maintenance for others
 <IfModule mod_rewrite.c>
 RewriteEngine On
 RewriteBase /
 
-# Skip maintenance for allowed IPs: 176.88.21.86 and 46.135.3.109
-RewriteCond %{REMOTE_ADDR} !^176\.88\.21\.86$
-RewriteCond %{REMOTE_ADDR} !^46\.135\.3\.109$
+# Show maintenance page for non-configurator URLs
+RewriteCond %{REQUEST_URI} !^/configurator/
+RewriteCond %{REQUEST_URI} !^/static/
+RewriteCond %{REQUEST_URI} !^/manifest\.json$
+RewriteCond %{REQUEST_URI} !^/favicon\.ico$
+RewriteCond %{REQUEST_URI} !^/(data|layers|icons)/
 RewriteCond %{REQUEST_URI} !^/maintenance\.html$
-RewriteRule ^(.*)$ /maintenance.html [R=503,L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /maintenance.html [L]
 
-# Original React routing for allowed IP
-RewriteRule ^index\.html$ - [L]
+# Handle configurator routes - redirect to React app
+RewriteCond %{REQUEST_URI} ^/configurator/
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . /index.html [L]

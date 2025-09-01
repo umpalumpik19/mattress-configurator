@@ -67,15 +67,15 @@ const ShoppingCart = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveIt
     
     // Name validation
     if (!formData.name.trim()) {
-      newErrors.name = 'Имя обязательно';
+      newErrors.name = 'Jméno je povinné';
     } else if (formData.name.trim().length < 2) {
-      newErrors.name = 'Имя должно содержать минимум 2 символа';
+      newErrors.name = 'Jméno musí mít minimálně 2 znaky';
     }
     
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!formData.email.trim()) {
-      newErrors.email = 'Email обязателен';
+      newErrors.email = 'Email je povinný';
     } else if (!emailRegex.test(formData.email)) {
       newErrors.email = 'Неверный формат email';
     }
@@ -83,7 +83,7 @@ const ShoppingCart = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveIt
     // Phone validation (Czech format)
     const phoneRegex = /^(\+420\s?)?[0-9]{3}\s?[0-9]{3}\s?[0-9]{3}$/;
     if (!formData.phone.trim()) {
-      newErrors.phone = 'Телефон обязателен';
+      newErrors.phone = 'Telefon je povinný';
     } else if (!phoneRegex.test(formData.phone.replace(/\s/g, ''))) {
       newErrors.phone = 'Неверный формат телефона';
     }
@@ -91,13 +91,13 @@ const ShoppingCart = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveIt
     // Delivery address validation (only if courier delivery is selected)
     if (formData.deliveryMethod === 'courier') {
       if (!formData.address.trim()) {
-        newErrors.address = 'Адрес обязателен для доставки';
+        newErrors.address = 'Adresa je povinná pro doručení';
       }
       if (!formData.city.trim()) {
-        newErrors.city = 'Город обязателен для доставки';
+        newErrors.city = 'Město je povinné pro doručení';
       }
       if (!formData.postalCode.trim()) {
-        newErrors.postalCode = 'Почтовый индекс обязателен';
+        newErrors.postalCode = 'PSČ je povinné';
       } else if (!/^[0-9]{3}\s?[0-9]{2}$/.test(formData.postalCode.trim())) {
         newErrors.postalCode = 'Неверный формат почтового индекса (например: 110 00)';
       }
@@ -139,7 +139,7 @@ const ShoppingCart = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveIt
       setIsProcessingPayment(true);
       
       try {
-        // Подготавливаем данные заказа
+        // Připravujeme data objednávky
         const orderData = {
           name: formData.name,
           email: formData.email,
@@ -162,14 +162,14 @@ const ShoppingCart = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveIt
           return;
         }
 
-        // Добавляем данные об оплате к заказу
+        // Přidáváme data o platbě k objednávce
         const orderWithPayment = {
           ...orderData,
           paymentStatus: 'paid',
           transactionId: paymentResult.transactionId
         };
 
-        // Сохраняем заказ в Supabase
+        // Ukládáme objednávku do Supabase
         const savedOrder = await createOrder(orderWithPayment);
         
         console.log('Order saved to database:', savedOrder);
@@ -198,7 +198,7 @@ const ShoppingCart = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveIt
         setOrderSuccess(true);
         setIsCheckoutOpen(false);
         
-        // Очищаем корзину
+        // Vyčistíme košík
         if (onClearCart) {
           onClearCart();
         }
@@ -217,8 +217,8 @@ const ShoppingCart = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveIt
         });
         
       } catch (error) {
-        console.error('Ошибка при создании заказа:', error);
-        alert('Произошла ошибка при отправке заказа. Пожалуйста, попробуйте еще раз.');
+        console.error('Chyba při vytvoření objednávky:', error);
+        alert('Došlo k chybě při odesílání objednávky. Zkuste to prosím znovu.');
       } finally {
         setIsProcessingPayment(false);
       }
@@ -250,8 +250,8 @@ const ShoppingCart = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveIt
       <div className="cart-overlay" onClick={onClose}>
         <div className="cart-modal" onClick={(e) => e.stopPropagation()}>
           <div className="cart-header">
-            <h2 className="cart-title">Корзина</h2>
-            <button className="cart-close" onClick={onClose} aria-label="Закрыть корзину">
+            <h2 className="cart-title">Košík</h2>
+            <button className="cart-close" onClick={onClose} aria-label="Zavřít košík">
               ×
             </button>
           </div>
@@ -259,7 +259,7 @@ const ShoppingCart = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveIt
           <div className="cart-content">
             {cartItems.length === 0 ? (
               <div className="cart-empty">
-                <p>Корзина пуста</p>
+                <p>Košík je prázdný</p>
               </div>
             ) : (
               <div className="cart-items">
@@ -293,13 +293,13 @@ const ShoppingCart = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveIt
                             <button 
                               className="quantity-btn"
                               onClick={() => onUpdateQuantity(index, item.quantity + 1)}
-                              aria-label="Увеличить количество"
+                              aria-label="Zvýšit množství"
                             >
                               +
                             </button>
                           </div>
                           <div className="cart-item-price">
-                            {(item.price * item.quantity).toLocaleString('ru-RU')} Kč
+                            {(item.price * item.quantity).toLocaleString('cs-CZ')} Kč
                           </div>
                         </div>
                       </div>
@@ -313,14 +313,14 @@ const ShoppingCart = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveIt
           {cartItems.length > 0 && (
             <div className="cart-footer">
               <div className="cart-total">
-                <span className="total-label">Сумма:</span>
-                <span className="total-price">{totalPrice.toLocaleString('ru-RU')} Kč</span>
+                <span className="total-label">Celkem:</span>
+                <span className="total-price">{totalPrice.toLocaleString('cs-CZ')} Kč</span>
               </div>
               <button 
-                className="checkout-btn"
+                className="checkout-btn btn-primary"
                 onClick={() => setIsCheckoutOpen(true)}
               >
-                Checkout
+                Objednat
               </button>
             </div>
           )}
@@ -332,14 +332,14 @@ const ShoppingCart = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveIt
         <div className="delete-overlay" onClick={() => setConfirmDelete(null)}>
           <div className="delete-modal" onClick={(e) => e.stopPropagation()}>
             <div className="delete-content">
-              <h3>Подтверждение удаления</h3>
-              <p>Вы уверены что хотите удалить товар из корзины?</p>
+              <h3>Potvrzení odstranění</h3>
+              <p>Jste si jisti, že chcete odstranit položku z košíku?</p>
               <div className="delete-actions">
                 <button 
                   className="delete-cancel"
                   onClick={() => setConfirmDelete(null)}
                 >
-                  Отмена
+                  Zrušit
                 </button>
                 <button 
                   className="delete-confirm"
@@ -348,7 +348,7 @@ const ShoppingCart = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveIt
                     setConfirmDelete(null);
                   }}
                 >
-                  Удалить
+                  Odstranit
                 </button>
               </div>
             </div>
@@ -368,7 +368,7 @@ const ShoppingCart = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveIt
               >
                 ←
               </button>
-              <h2 className="checkout-title">Оформление заказа</h2>
+              <h2 className="checkout-title">Dokončení objednávky</h2>
               <button 
                 className="checkout-close"
                 onClick={() => {
@@ -396,26 +396,26 @@ const ShoppingCart = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveIt
                         <span>{item.quantity}</span>
                       </div>
                       <div className="summary-price">
-                        {(item.price * item.quantity).toLocaleString('ru-RU')} Kč
+                        {(item.price * item.quantity).toLocaleString('cs-CZ')} Kč
                       </div>
                     </div>
                   );
                 })}
                 <div className="summary-total">
-                  <span>Итоговая сумма: {totalPrice.toLocaleString('ru-RU')} Kč</span>
+                  <span>Celková suma: {totalPrice.toLocaleString('cs-CZ')} Kč</span>
                 </div>
               </div>
 
               {/* Customer Form */}
               <form className="checkout-form" onSubmit={(e) => e.preventDefault()}>
                 <div className="form-group">
-                  <label htmlFor="customer-name">Ваше имя</label>
+                  <label htmlFor="customer-name">Vaše jméno</label>
                   <input
                     id="customer-name"
                     type="text"
                     value={formData.name}
                     onChange={(e) => handleInputChange('name', e.target.value)}
-                    placeholder="Ваше имя"
+                    placeholder="Vaše jméno"
                     className={errors.name ? 'error' : ''}
                     maxLength="50"
                   />
@@ -437,7 +437,7 @@ const ShoppingCart = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveIt
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="customer-phone">Телефон</label>
+                  <label htmlFor="customer-phone">Telefon</label>
                   <input
                     id="customer-phone"
                     type="tel"
@@ -451,7 +451,7 @@ const ShoppingCart = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveIt
                 </div>
 
                 <div className="form-section">
-                  <h3>Доставка</h3>
+                  <h3>Doručení</h3>
                   <div className="radio-group">
                     <label className="radio-option">
                       <input
@@ -461,7 +461,7 @@ const ShoppingCart = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveIt
                         checked={formData.deliveryMethod === 'pickup'}
                         onChange={(e) => handleInputChange('deliveryMethod', e.target.value)}
                       />
-                      <span>Самовывоз</span>
+                      <span>Osobní odběr</span>
                     </label>
                     <label className="radio-option">
                       <input
@@ -471,7 +471,7 @@ const ShoppingCart = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveIt
                         checked={formData.deliveryMethod === 'courier'}
                         onChange={(e) => handleInputChange('deliveryMethod', e.target.value)}
                       />
-                      <span>Доставка курьером</span>
+                      <span>Kuriérní doručení</span>
                     </label>
                   </div>
                   
@@ -479,13 +479,13 @@ const ShoppingCart = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveIt
                   {formData.deliveryMethod === 'courier' && (
                     <div className="delivery-address" style={{ animation: 'slideDown 0.3s ease-out' }}>
                       <div className="form-group">
-                        <label htmlFor="delivery-address">Адрес доставки</label>
+                        <label htmlFor="delivery-address">Adresa doručení</label>
                         <input
                           id="delivery-address"
                           type="text"
                           value={formData.address}
                           onChange={(e) => handleInputChange('address', e.target.value)}
-                          placeholder="Улица, дом, квартира"
+                          placeholder="Ulice, dům, byt"
                           className={errors.address ? 'error' : ''}
                           maxLength="200"
                         />
@@ -494,13 +494,13 @@ const ShoppingCart = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveIt
                       
                       <div className="address-row">
                         <div className="form-group">
-                          <label htmlFor="delivery-city">Город</label>
+                          <label htmlFor="delivery-city">Město</label>
                           <input
                             id="delivery-city"
                             type="text"
                             value={formData.city}
                             onChange={(e) => handleInputChange('city', e.target.value)}
-                            placeholder="Прага"
+                            placeholder="Praha"
                             className={errors.city ? 'error' : ''}
                             maxLength="50"
                           />
@@ -508,7 +508,7 @@ const ShoppingCart = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveIt
                         </div>
                         
                         <div className="form-group">
-                          <label htmlFor="delivery-postal">Почтовый индекс</label>
+                          <label htmlFor="delivery-postal">PSČ</label>
                           <input
                             id="delivery-postal"
                             type="text"
@@ -523,12 +523,12 @@ const ShoppingCart = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveIt
                       </div>
                       
                       <div className="form-group">
-                        <label htmlFor="delivery-notes">Примечания к доставке (опционально)</label>
+                        <label htmlFor="delivery-notes">Poznámky k doručení (volitelné)</label>
                         <textarea
                           id="delivery-notes"
                           value={formData.deliveryNotes}
                           onChange={(e) => handleInputChange('deliveryNotes', e.target.value)}
-                          placeholder="Этаж, домофон, время доставки и т.д."
+                          placeholder="Patro, domofon, čas doručení apod."
                           className="delivery-notes"
                           maxLength="300"
                           rows="3"
@@ -588,7 +588,7 @@ const ShoppingCart = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveIt
             
             <div className="checkout-footer">
               <button 
-                className="checkout-submit"
+                className="checkout-submit btn-primary"
                 onClick={handleCheckout}
                 disabled={isProcessingPayment}
               >

@@ -1,0 +1,112 @@
+Обзор проекта: Mattress Configurator
+===================================
+
+Краткое описание
+- Назначение: веб‑конфигуратор матрасов с визуализацией слоёв, калькуляцией цены, корзиной, оформлением заказа и отправкой уведомлений на e‑mail.
+- Клиент: React (Create React App). Визуализация слоёв по выбранной высоте/ширине и типам материалов.
+- Данные: Supabase (таблицы для слоёв, чехлов, заказов). Импорт исходных конфигураций из JSON.
+- Email: Supabase Edge Function send-email с HTML‑шаблонами, планируется MailerSend.
+- Оплата: заглушки нескольких методов (Comgate, карта, наложенный платёж, Google Pay) для демонстрации потока.
+
+Технологии и зависимости
+- React 19, react-scripts 5 (CRA), Testing Library.
+- @supabase/supabase-js v2, Supabase Edge Functions (Deno, std@0.168.0).
+- Почта: интеграция через supabase.functions.invoke('send-email'); в зависимостях присутствуют @sendgrid/mail (не используется в текущем коде).
+- Платежи: @stripe/stripe-js, stripe присутствуют в зависимостях, но в UI используются заглушки (services/paymentStubs.js).
+- Прочее: web-vitals, dotenv для скриптов Node.
+
+Структура проекта (ключевое)
+- src/App.js — основная страница конфигуратора: выбор размера/высоты, групп опций (слои и чехол), формирование URL, работа с API, корзина и футер.
+- src/components/
+  • FloatingMattress.js — «всплывающая» визуализация выбранных слоёв поверх основного полотна, когда основной блок вне видимости.
+  • ShoppingCart.js — корзина и чекаут: форма клиента, валидации, процессинг оплаты (заглушки), создание заказа, отправка писем, модалка успеха.
+  • OrderSuccessModal.js — модальное окно подтверждения с деталями заказа.
+  • Footer.js — подвал, данные берутся из public/data/footer-config.json.
+- src/api/mattressApi.js — обращения к Supabase (mattress_layers, mattress_covers, orders) и трансформация данных в формат UI.
+- src/services/
+  • paymentStubs.js — эмуляция платёжных методов (Comgate, card, dobírka, Google Pay).
+  • emailService.js — вызов Edge Function send-email для отправки писем клиенту и администратору.
+- src/supabaseClient.js — инициализация клиента Supabase из переменных окружения.
+- public/data/
+  • layers-config.json — справочник слоёв/чехлов (цены по размерам, высоты, иконки, slug).
+  • layer-descriptions.json — расширенные описания материалов для UI.
+  • url-mapping.json — человекочитаемые сегменты для формирования URL конфигурации.
+  • footer-config.json — конфиг данных подвала.
+- public/layers/ — изображения слоёв, структурированы по высоте (10/20/30), типу (single/double), позиции (sloj-odin/dva/tri) и slug материала.
+- supabase/functions/send-email/index.ts — Edge Function с CORS, HTML‑шаблонами писем (клиент/админ), форматированием состава заказа.
+- supabase-schema.sql — схема БД: mattress_layers, mattress_covers, orders, индексы и триггеры обновления updated_at.
+- import-data-to-supabase.js — Node‑скрипт подготовки и загрузки данных из public/data в Supabase.
+- README.md, SETUP_GUIDE.md, MAILERSEND_SETUP.md, STRIPE_SETUP.md — документация по запуску и интеграциям.
+
+Поток данных (высокоуровнево)
+1) Загрузка справочников
+   - При старте UI запрашивает слои/чехлы из Supabase (src/api/mattressApi.js) и/или использует локальные JSON‑конфиги.
+   - Данные трансформируются в удобный вид (цены по размеру, доступные высоты, иконки, slug).
+2) Конфигуратор
+   - Пользователь выбирает: размер (например, 160x200), высоту (10/20/30), варианты слоёв (sloj‑odin/dva/tri) и чехол.
+   - UI формирует визуализацию (основной холст + FloatingMattress при прокрутке), пересчитывает цену, обновляет shareable URL.
+3) Оформление заказа
+   - В корзине вводятся контактные данные, способ доставки и оплаты.
+   - Выполняется эмуляция платёжного сценария (services/paymentStubs.js). При успехе создаётся запись в orders (createOrder).
+   - После сохранения заказа вызывается Edge Function send-email для отправки писем клиенту и администратору.
+
+Формирование URL конфигурации
+- По шаблону: {size}-{height}cm-{layer1}-{layer2}-{layer3}-{cover}, где сегменты маппятся через public/data/url-mapping.json.
+- Это даёт короткие ссылки на конкретные конфигурации.
+
+Переменные окружения
+- REACT_APP_SUPABASE_URL — URL проекта Supabase.
+- REACT_APP_SUPABASE_ANON_KEY — публичный anon‑ключ Supabase.
+- Для Edge Function (send-email) ключи сервиса рассылки настраиваются в окружении проекта Supabase (не в .env фронтенда).
+
+Команды npm (package.json)
+- start — запуск CRA‑сервера разработчика.
+- build — сборка продакшн‑бандла.
+- test — запуск тестов CRA (в проекте присутствует дефолтный тест из шаблона CRA).
+- eject — извлечение конфигурации CRA (безвозвратно).
+
+Локальный запуск (кратко)
+1) npm install
+2) Создать .env с REACT_APP_SUPABASE_URL и REACT_APP_SUPABASE_ANON_KEY
+3) (Опционально) Развернуть схему БД (supabase-schema.sql) и импортировать данные: node import-data-to-supabase.js
+4) (Опционально) Задеплоить Supabase Edge Function send-email и настроить MailerSend.
+5) npm start и открыть http://localhost:3000
+
+База данных Supabase (из supabase-schema.sql)
+- mattress_layers: layer_id, layer_name, size, price, available_heights[], icon_path, slug, created_at/updated_at
+- mattress_covers: cover_id, cover_name, price, slug, icon_path, created_at/updated_at
+- orders: данные клиента и доставки, JSON‑конфигурация заказа, сумма, статус
+- Индексы по ключевым полям и триггеры обновления updated_at
+
+Замечания и риски
+- Кодировка: в ряде файлов наблюдаются повреждённые кириллические/чешские символы (отображаются «кракозябрами»). Рекомендуется убедиться, что все текстовые файлы сохранены в UTF‑8 (без BOM) и отрендерены корректно в IDE/браузере.
+- README.md содержит маркеры конфликтов слияния (<<<<<<< ======= >>>>>>>). Стоит разрешить конфликт и привести файл в порядок.
+- Зависимости @sendgrid/mail и stripe присутствуют, но не используются напрямую в текущем UX. Возможна чистка зависимостей или дальнейшая интеграция.
+- Тесты: дефолтный тест из CRA (ищет «learn react») вероятно не проходит. Нужны актуальные unit/E2E тесты по ключевым сценариям.
+
+Идеи для развития
+- Платежи: заменить заглушки на реальную интеграцию (Comgate/Stripe/GPAY/Apple Pay), добавить обработку вебхуков статусов.
+- SEO и контент: уникальные тексты и метаданные, предпросмотр в соцсетях, карта сайта, локализация.
+- UX: история конфигураций, генерация PDF/печати, сравнение вариантов, сохранение в Supabase с короткими ссылками.
+- Наблюдаемость: централизованный лог ошибок, мониторинг производительности (web‑vitals), Sentry.
+- Тесты: покрыть расчёты цен, формирование URL, валидацию формы заказа, интеграцию с Edge Function.
+
+Ссылки на ключевые файлы
+- src/App.js
+- src/components/FloatingMattress.js
+- src/components/ShoppingCart.js
+- src/components/OrderSuccessModal.js
+- src/components/Footer.js
+- src/api/mattressApi.js
+- src/services/paymentStubs.js
+- src/services/emailService.js
+- src/supabaseClient.js
+- public/data/layers-config.json
+- public/data/layer-descriptions.json
+- public/data/url-mapping.json
+- public/data/footer-config.json
+- supabase/functions/send-email/index.ts
+- supabase-schema.sql
+- import-data-to-supabase.js
+
+Последнее обновление: автоматически сгенерировано обзором текущего репозитория.

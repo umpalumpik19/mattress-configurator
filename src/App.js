@@ -27,7 +27,7 @@ const SIZES = [
   '180x200',
   '200x200',
 ];
-const HEIGHTS = [10, 20, 30]; // см
+const HEIGHTS = [10, 20, 30]; // cm
 
 const sizeKind = (s) => (+s.split('x')[0] >= 160 ? 'double' : 'single');
 const visibleLayerKeys = {
@@ -54,10 +54,10 @@ const getLayerPrice = (layer, size) => {
 };
 
 const LAYER_TITLES = {
-  'sloj-odin': 'Слой 1',
-  'sloj-dva': 'Слой 2',
-  'sloj-tri': 'Слой 3',
-  potah: 'Чехол',
+  'sloj-odin': 'Vrstva 1',
+  'sloj-dva': 'Vrstva 2',
+  'sloj-tri': 'Vrstva 3',
+  potah: 'Potah',
 };
 
 /** Ранний mobile-режим — с 1024px */
@@ -234,7 +234,14 @@ const generateUrlPath = (
 const parseUrlPath = (pathname, urlMapping) => {
   if (!urlMapping) return null;
 
-  const pathParts = pathname.split('/');
+  // Remove /configurator/ prefix if present
+  const cleanPath = pathname.startsWith('/configurator/') 
+    ? pathname.substring('/configurator/'.length)
+    : pathname.substring(1); // remove leading slash
+
+  if (!cleanPath || cleanPath === '') return null;
+
+  const pathParts = cleanPath.split('/');
   const config = pathParts[pathParts.length - 1];
   if (!config || config === '') return null;
 
@@ -300,6 +307,10 @@ const App = () => {
 
   // Calculator visibility state for bottom bar breakdown
   const [isCalculatorVisible, setIsCalculatorVisible] = useState(true);
+
+  // Animation states
+  const [priceChanged, setPriceChanged] = useState(false);
+  const [cartUpdated, setCartUpdated] = useState(false);
 
   const isMobile = useIsMobile(1100);
   const priceCalcRef = useRef(null);
@@ -404,7 +415,7 @@ const App = () => {
         setLoading(false);
       } catch (e) {
         if (!cancelled) {
-          setError('Ошибка загрузки конфигурации');
+          setError('Chyba při načítání konfigurace');
           setLoading(false);
         }
       }
@@ -429,17 +440,8 @@ const App = () => {
       urlMapping,
     );
 
-    const pathParts = window.location.pathname.split('/');
-    const lastPart = pathParts[pathParts.length - 1];
-    const isConfig = lastPart && lastPart.includes('x') && lastPart.includes('cm');
-
-    const basePath = isConfig
-      ? pathParts.slice(0, -1).join('/') || '/'
-      : window.location.pathname;
-
-    const newUrl = basePath.endsWith('/')
-      ? basePath + urlPath
-      : basePath + '/' + urlPath;
+    // Always use /configurator/ as base path
+    const newUrl = '/configurator/' + urlPath;
 
     window.history.replaceState({}, '', newUrl);
   }, [
@@ -623,6 +625,24 @@ const App = () => {
     return total;
   }, [getSelectedItemData, configData, selectedOptions, selectedHeight]);
 
+  // Анимация изменения цены
+  useEffect(() => {
+    if (configData && urlInitialized) {
+      setPriceChanged(true);
+      const timer = setTimeout(() => setPriceChanged(false), 800);
+      return () => clearTimeout(timer);
+    }
+  }, [totalPrice, configData, urlInitialized]);
+
+  // Анимация обновления корзины
+  useEffect(() => {
+    if (cartItems.length > 0) {
+      setCartUpdated(true);
+      const timer = setTimeout(() => setCartUpdated(false), 600);
+      return () => clearTimeout(timer);
+    }
+  }, [cartItems.length]);
+
   // Построение описательных блоков (динамические, статические, дополнительные)
   const descriptionData = useMemo(() => {
     if (!configData) return { dynamicBlocks: [], infoBlocks: [] };
@@ -663,9 +683,9 @@ const App = () => {
 
     const humanizeIndices = (arr) => {
       if (!arr.length) return '';
-      if (arr.length === 1) return `Слой ${arr[0]}`;
-      if (arr.length === 2) return `Слой ${arr[0]} и ${arr[1]}`;
-      return `Слой ${arr.slice(0, -1).join(', ')} и ${arr[arr.length - 1]}`;
+      if (arr.length === 1) return `Vrstva ${arr[0]}`;
+      if (arr.length === 2) return `Vrstva ${arr[0]} a ${arr[1]}`;
+      return `Vrstva ${arr.slice(0, -1).join(', ')} a ${arr[arr.length - 1]}`;
     };
 
     const dynamicBlocks = groups.map((g) => {
@@ -741,13 +761,13 @@ const App = () => {
     const layerNames = vKeys.map(key => getName(key)).filter(Boolean);
     const layersText = layerNames.join(' + ');
     
-    const name = `Матрас ${selectedSize}, ${selectedHeight}см — ${layersText} | Чехол: ${getName('potah')}`;
+    const name = `Matrace ${selectedSize}, ${selectedHeight}cm — ${layersText} | Potah: ${getName('potah')}`;
 
     // Формируем конфигурацию только для видимых слоев
     const configuration = {
       cover: getName('potah'),
       size: selectedSize,
-      height: `${selectedHeight} см`,
+      height: `${selectedHeight} cm`,
     };
     
     vKeys.forEach((key, index) => {
@@ -816,13 +836,13 @@ const App = () => {
   if (loading) {
     return (
       <div className="app-root loading-screen">
-        Загрузка конфигуратора...
+        Načítání konfigurace...
       </div>
     );
   }
   if (error || !configData) {
     return (
-      <div className="app-root error-screen">{error || 'Ошибка загрузки'}</div>
+      <div className="app-root error-screen">{error || 'Chyba při načítání'}</div>
     );
   }
 
@@ -837,11 +857,15 @@ const App = () => {
     >
       {/* Cart Button */}
       <button 
-        className="cart-button"
+        className={`cart-button ${cartUpdated ? 'animate-pulse' : ''}`}
         onClick={() => setIsCartOpen(true)}
         aria-label="Открыть корзину"
       >
-        🛒 {cartItems.length > 0 && <span className="cart-badge">{cartItems.length}</span>}
+        🛒 {cartItems.length > 0 && (
+          <span className={`cart-badge ${cartUpdated ? 'animate-bounce' : ''}`}>
+            {cartItems.length}
+          </span>
+        )}
       </button>
 
       {/* Контент */}
@@ -883,7 +907,7 @@ const App = () => {
         {/* Селекторы размеров и высоты */}
         <div className="controls">
           <div className="control-group glass-panel">
-            <h3 className="control-title">Размер</h3>
+            <h3 className="control-title">Rozměr</h3>
             <div className="control-options size-options">
               {SIZES.map((sz) => (
                 <label key={sz} className="control-item">
@@ -901,7 +925,7 @@ const App = () => {
           </div>
 
           <div className="control-group glass-panel">
-            <h3 className="control-title">Высота</h3>
+            <h3 className="control-title">Výška</h3>
             <div className="control-options height-options">
               {HEIGHTS.map((h) => (
                 <label key={h} className="control-item">
@@ -912,7 +936,7 @@ const App = () => {
                     checked={selectedHeight === h}
                     onChange={() => setSelectedHeight(h)}
                   />
-                  <span className="control-box">{h} см</span>
+                  <span className="control-box">{h} cm</span>
                 </label>
               ))}
             </div>
@@ -958,9 +982,9 @@ const App = () => {
         {isMobile && (
           <div className="price-calculator glass-panel" ref={priceCalcRef}>
             <div className="price-header">
-              <span className="price-label">Цена и подробности</span>
+              <span className="price-label">Cena a detaily</span>
               <div className="price-amount">
-                <span className="price-value">
+                <span className={`price-value ${priceChanged ? 'price-update' : ''}`}>
                   {totalPrice.toLocaleString('ru-RU')}
                 </span>
                 <span className="price-currency">Kč</span>
@@ -969,12 +993,12 @@ const App = () => {
 
             <div className="price-breakdown">
               <div className="price-row">
-                <span>Высота</span>
-                <span>{selectedHeight} см</span>
+                <span>Výška</span>
+                <span>{selectedHeight} cm</span>
                 <span className="price-col" />
               </div>
               <div className="price-row">
-                <span>Размер</span>
+                <span>Rozměr</span>
                 <span>{selectedSize}</span>
                 <span className="price-col" />
               </div>
@@ -998,7 +1022,7 @@ const App = () => {
               })}
 
               <div className="price-row">
-                <span>Чехол</span>
+                <span>Potah</span>
                 <span>
                   {getSelectedItemData('potah', selectedOptions['potah'])
                     ?.name || '-'}
@@ -1015,8 +1039,8 @@ const App = () => {
               </div>
             </div>
 
-            <button className="add-to-cart-btn" onClick={handleAddToCart}>
-              Добавить в корзину
+            <button className="add-to-cart-btn btn-primary" onClick={handleAddToCart}>
+              Přidat do košíku
             </button>
           </div>
         )}
@@ -1117,14 +1141,14 @@ const App = () => {
 
         <div className="bb-main-row">
           <div className="bb-price">
-            <span className="bb-value">
+            <span className={`bb-value ${priceChanged ? 'price-update' : ''}`}>
               {totalPrice.toLocaleString('ru-RU')}
             </span>
             <span className="bb-currency">Kč</span>
           </div>
 
           <div className="bb-actions">
-            <button className="bb-btn" onClick={scrollToDetails}>
+            <button className="bb-btn btn-primary pulse-small" onClick={scrollToDetails}>
               Перейти к корзине
             </button>
           </div>
@@ -1158,9 +1182,9 @@ const App = () => {
         <div className="floating-calculator">
           <div className="price-calculator glass-panel">
             <div className="price-header">
-              <span className="price-label">Цена и подробности</span>
+              <span className="price-label">Cena a detaily</span>
               <div className="price-amount">
-                <span className="price-value">
+                <span className={`price-value ${priceChanged ? 'price-update' : ''}`}>
                   {totalPrice.toLocaleString('ru-RU')}
                 </span>
                 <span className="price-currency">Kč</span>
@@ -1169,12 +1193,12 @@ const App = () => {
 
             <div className="price-breakdown">
               <div className="price-row">
-                <span>Высота</span>
-                <span>{selectedHeight} см</span>
+                <span>Výška</span>
+                <span>{selectedHeight} cm</span>
                 <span className="price-col" />
               </div>
               <div className="price-row">
-                <span>Размер</span>
+                <span>Rozměr</span>
                 <span>{selectedSize}</span>
                 <span className="price-col" />
               </div>
@@ -1198,7 +1222,7 @@ const App = () => {
               })}
 
               <div className="price-row">
-                <span>Чехол</span>
+                <span>Potah</span>
                 <span>
                   {getSelectedItemData('potah', selectedOptions['potah'])
                     ?.name || '-'}
@@ -1215,8 +1239,8 @@ const App = () => {
               </div>
             </div>
 
-            <button className="add-to-cart-btn" onClick={handleAddToCart}>
-              Добавить в корзину
+            <button className="add-to-cart-btn btn-primary" onClick={handleAddToCart}>
+              Přidat do košíku
             </button>
           </div>
         </div>

@@ -22,6 +22,38 @@
   --dur: 160ms;
   --elev: cubic-bezier(.22,.61,.36,1);
 
+  /* UX Микроанимации - временные интервалы */
+  --anim-fast: 150ms;
+  --anim-medium: 300ms;  
+  --anim-slow: 500ms;
+  --anim-pulse: 3s;
+  
+  /* Easing функции для консистентности */
+  --ease-natural: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Эффекты свечения */
+  --glow-soft: 0 0 20px rgba(255, 255, 255, 0.15), 0 0 40px rgba(255, 255, 255, 0.08);
+  --glow-medium: 0 0 30px rgba(255, 255, 255, 0.12), 0 0 60px rgba(255, 255, 255, 0.06);
+  --glow-strong: 0 0 40px rgba(255, 255, 255, 0.18), 0 0 80px rgba(255, 255, 255, 0.1);
+  
+  /* Стандартные трансформации */
+  --hover-lift: translateY(-2px);
+  --hover-scale: scale(1.02);
+  --micro-scale: scale(1.05);
+
+  /* Единая система кнопок */
+  --btn-bg: linear-gradient(180deg, color-mix(in oklab, var(--accent) 12%, #0b0b0c) 0%, #0b0b0c 100%);
+  --btn-bg-hover: linear-gradient(180deg, color-mix(in oklab, var(--accent) 16%, #111113) 0%, #111113 100%);
+  --btn-color: #fff;
+  --btn-border: 1px solid var(--line);
+  --btn-radius: var(--radius);
+  --btn-padding: 12px 16px;
+  --btn-font-weight: 700;
+  --btn-shadow: 0 4px 12px rgba(0,0,0,.25);
+  --btn-shadow-hover: 0 8px 28px rgba(0,0,0,.35), var(--glow-soft);
+  --btn-ripple-color: rgba(255, 255, 255, 0.3);
 
   /* Глобальная высота карточек (из App ставится инлайном) */
   --global-card-min-height: 56px;
@@ -273,7 +305,8 @@ html, body { overflow-x: hidden; } /* Никогда не допускаем г�
   z-index: 1100;
   max-width: 350px;
   min-width: 280px;
-  transition: all 0.3s var(--elev);
+  transition: all var(--anim-medium) var(--ease-natural);
+  filter: drop-shadow(var(--glow-soft));
 }
 
 .price-calculator{
@@ -282,8 +315,10 @@ html, body { overflow-x: hidden; } /* Никогда не допускаем г�
   padding: var(--padded);
   background: var(--surface);
   backdrop-filter: saturate(140%) blur(20px);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 
-              inset 0 1px rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    var(--glow-medium),
+    0 20px 60px rgba(0, 0, 0, 0.4), 
+    inset 0 1px rgba(255, 255, 255, 0.1);
 }
 
 /* Стили для compact состояния и toggle кнопки удалены */
@@ -347,18 +382,8 @@ html, body { overflow-x: hidden; } /* Никогда не допускаем г�
 .add-to-cart-btn{
   width: 100%;
   margin-top: 14px;
-  background: linear-gradient(180deg, color-mix(in oklab, var(--accent) 12%, #0b0b0c) 0%, #0b0b0c 100%);
-  color: #fff;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 12px 16px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background var(--dur) var(--elev), transform var(--dur-fast) var(--elev), box-shadow var(--dur) var(--elev);
-  white-space: normal;
+  /* Наследует все стили от .btn-primary через JavaScript класс */
 }
-.add-to-cart-btn:hover{ background: linear-gradient(180deg, color-mix(in oklab, var(--accent) 16%, #111113) 0%, #111113 100%); box-shadow: 0 8px 28px rgba(0,0,0,.35); transform: translateY(-1px); }
-.add-to-cart-btn:active{ transform: translateY(0); }
 
 /* Постоянный нижний блок с ценой */
 .bottom-bar{
@@ -371,7 +396,10 @@ html, body { overflow-x: hidden; } /* Никогда не допускаем г�
   padding: 10px 16px;
   display: flex;
   flex-direction: column;
-  transition: all 0.3s var(--elev);
+  transition: all var(--anim-medium) var(--ease-natural);
+  box-shadow:
+    0 0 25px rgba(255, 255, 255, 0.1) inset,
+    0 -5px 30px rgba(255, 255, 255, 0.08);
 }
 
 /* Основная строка с ценой и кнопкой */
@@ -440,20 +468,13 @@ html, body { overflow-x: hidden; } /* Никогда не допускаем г�
 
 .bb-actions{ display: grid; gap: 8px; }
 .bb-btn{
-  background: #0b0b0c;
-  color: var(--text);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 10px 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: border-color var(--dur) var(--elev), background var(--dur) var(--elev), transform var(--dur-fast) var(--elev), box-shadow var(--dur) var(--elev);
-  white-space: normal;
+  /* Наследует стили от .btn-primary, добавляем только специфичные настройки */
   min-width: 140px;
+  padding: 10px 12px; /* Чуть компактнее для bottom bar */
+  font-size: 13px;
 }
 
-/* Правило удалено - bottom-bar теперь не отображается на десктопе */
-.bb-btn:hover{ border-color: color-mix(in oklab, var(--accent) 60%, transparent); box-shadow: 0 8px 24px rgba(0,0,0,.26); transform: translateY(-1px); }
+/* bb-btn теперь наследует hover стили от .btn-primary */
 .bb-btn.secondary{ opacity: .95; }
 
 /* Правила удалены - bottom-bar больше не используется на десктопе */
@@ -482,14 +503,20 @@ html, body { overflow-x: hidden; } /* Никогда не допускаем г�
   display: flex;
   align-items: center;
   gap: 8px;
-  transition: all var(--dur) var(--elev);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  transition: all var(--anim-fast) var(--ease-natural);
+  box-shadow: 
+    var(--glow-soft),
+    0 4px 20px rgba(0, 0, 0, 0.25),
+    inset 0 1px rgba(255, 255, 255, 0.1);
 }
 
 .cart-button:hover {
   background: var(--surface-strong);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+  transform: var(--hover-lift);
+  box-shadow: 
+    var(--glow-medium),
+    0 8px 30px rgba(0, 0, 0, 0.35),
+    inset 0 1px rgba(255, 255, 255, 0.15);
 }
 
 .cart-badge {
@@ -504,6 +531,189 @@ html, body { overflow-x: hidden; } /* Никогда не допускаем г�
   font-size: 12px;
   font-weight: 600;
   min-width: 20px;
+  transition: all var(--anim-fast) var(--ease-bounce);
+}
+
+/* UX Микроанимации */
+
+/* Базовый стиль для всех кнопок приложения */
+.btn-primary {
+  background: var(--btn-bg);
+  color: var(--btn-color);
+  border: var(--btn-border);
+  border-radius: var(--btn-radius);
+  padding: var(--btn-padding);
+  font-weight: var(--btn-font-weight);
+  cursor: pointer;
+  transition: all var(--anim-fast) var(--ease-natural);
+  white-space: normal;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--btn-shadow);
+  font-size: 14px;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: fit-content;
+}
+
+.btn-primary:hover {
+  background: var(--btn-bg-hover);
+  box-shadow: var(--btn-shadow-hover);
+  transform: var(--hover-lift);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Ripple эффект для всех кнопок */
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: var(--btn-ripple-color);
+  transform: translate(-50%, -50%) scale(0);
+  transition: all 0.5s ease;
+  pointer-events: none;
+}
+
+.btn-primary:active::before {
+  width: 100px;
+  height: 100px;
+  animation: rippleWave 0.6s ease-out;
+}
+
+/* Модификатор для кнопки с пульсацией (bottom bar) */
+.btn-primary.pulse {
+  animation: gentlePulse var(--anim-pulse) ease-in-out infinite;
+}
+
+.btn-primary.pulse:hover {
+  animation-play-state: paused;
+}
+
+/* Уменьшенная пульсация для кнопки "перейти к корзине" */
+.btn-primary.pulse-small {
+  animation: gentlePulseSmall 4s ease-in-out infinite;
+}
+
+.btn-primary.pulse-small:hover {
+  animation-play-state: paused;
+}
+
+/* Анимация пульсации корзины при добавлении товара */
+@keyframes cartPulse {
+  0%, 100% { 
+    transform: scale(1); 
+  }
+  50% { 
+    transform: scale(1.1); 
+    box-shadow: 
+      var(--glow-strong),
+      0 8px 30px rgba(0, 0, 0, 0.4),
+      inset 0 1px rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* Анимация подпрыгивания badge */
+@keyframes badgeBounce {
+  0%, 100% { 
+    transform: translateY(0) scale(1); 
+  }
+  50% { 
+    transform: translateY(-4px) scale(1.15); 
+  }
+}
+
+/* Класс для запуска анимации корзины */
+.cart-button.animate-pulse {
+  animation: cartPulse 0.6s var(--ease-natural);
+}
+
+/* Класс для запуска анимации badge */
+.cart-badge.animate-bounce {
+  animation: badgeBounce 0.5s var(--ease-bounce);
+}
+
+/* Легкая пульсация для кнопки bottom bar */
+@keyframes gentlePulse {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 4px 12px rgba(0,0,0,.2);
+  }
+  50% {
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: 0 6px 18px rgba(0,0,0,.25), var(--glow-soft);
+  }
+}
+
+/* Уменьшенная пульсация для кнопки "перейти к корзине" */
+@keyframes gentlePulseSmall {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    box-shadow: 0 4px 12px rgba(0,0,0,.2);
+  }
+  50% {
+    transform: translateY(-0.5px) scale(1.01);
+    box-shadow: 0 5px 15px rgba(0,0,0,.22), 0 0 15px rgba(255, 255, 255, 0.08);
+  }
+}
+
+/* Микро-пульсация цены при обновлении */
+@keyframes priceUpdate {
+  0%, 100% { 
+    transform: scale(1); 
+  }
+  50% { 
+    transform: var(--micro-scale); 
+    color: color-mix(in oklab, var(--accent) 90%, #fff 10%);
+  }
+}
+
+/* Волновая анимация для кнопки */
+@keyframes rippleWave {
+  0% { 
+    transform: scale(0); 
+    opacity: 1; 
+  }
+  100% { 
+    transform: scale(2.5); 
+    opacity: 0; 
+  }
+}
+
+/* Ripple эффект теперь наследуется от .btn-primary */
+
+/* Подсветка строк при изменении */
+@keyframes rowHighlight {
+  0% { 
+    background: rgba(255, 255, 255, 0.1); 
+    transform: scale(1.01);
+  }
+  100% { 
+    background: transparent; 
+    transform: scale(1);
+  }
+}
+
+/* Класс для подсветки изменившихся строк */
+.price-row.highlight {
+  animation: rowHighlight 0.8s var(--ease-smooth);
+}
+
+/* Классы для анимации обновления цены */
+.price-value.price-update {
+  animation: priceUpdate 0.8s var(--ease-smooth);
+}
+
+.bb-value.price-update {
+  animation: priceUpdate 0.8s var(--ease-smooth);
 }
 
 /* ---------- Адаптив: раньше переходим в компакт ---------- */
@@ -535,6 +745,17 @@ html, body { overflow-x: hidden; } /* Никогда не допускаем г�
 
   .app-root { padding-bottom: 64px; } /* Место под bottom-bar на мобильных */
   .layout{ padding: 16px; gap: 16px; }
+  
+  /* Увеличение иконки корзины на планшетах и мобильных */
+  .cart-button {
+    padding: 14px 18px;     /* было: 12px 16px */
+    font-size: 22px;        /* было: 18px */
+  }
+  .cart-badge {
+    width: 24px;            /* было: 20px */
+    height: 24px;           /* было: 20px */
+    font-size: 14px;        /* было: 12px */
+  }
   /* Более компактный и адаптивный бокс изображения на мобилках */
   .visual .layers-canvas{ height: clamp(200px, 38vh, 280px); }
   .controls{ grid-template-columns: 1fr; }
@@ -603,8 +824,12 @@ html, body { overflow-x: hidden; } /* Никогда не допускаем г�
   .cart-button {
     top: 16px;
     right: 16px;
-    padding: 10px 14px;
-    font-size: 16px;
+    padding: 12px 16px;     /* было: 10px 14px */
+    font-size: 20px;        /* было: 16px */
+  }
+  .cart-badge {
+    width: 22px;            /* было: 20px */
+    height: 22px;           /* было: 20px */
   }
 }
 
@@ -639,8 +864,8 @@ html, body { overflow-x: hidden; } /* Никогда не допускаем г�
   .cart-button {
     top: 12px;
     right: 12px;
-    padding: 8px 12px;
-    font-size: 14px;
+    padding: 10px 14px;     /* было: 8px 12px */
+    font-size: 18px;        /* было: 14px */
   }
   
   .cart-badge {
