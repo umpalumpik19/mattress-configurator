@@ -2,15 +2,13 @@
   "permissions": {
     "allow": [
       "Read(c:\\Users\\boris\\Изображения\\Снимки экрана/**)",
-      "Read(c:\\Users\\boris\\Изображения\\Снимки экрана/**)",
-      "Read(c:\\Users\\boris\\Изображения\\Снимки экрана/**)",
       "WebFetch(domain:raw.githubusercontent.com)",
-      "Read(c:\\Users\\boris\\Изображения\\Снимки экрана/**)",
-      "Read(c:\\Users\\boris\\Изображения\\Снимки экрана/**)",
       "Bash(export REACT_APP_SUPABASE_URL=https://xuatcmcuqhgwmgwifxzd.supabase.co)",
       "Bash(export:*)",
       "Bash(node:*)"
     ],
-    "defaultMode": "acceptEdits"
+    "defaultMode": "acceptEdits",
+    "autoSave": true,
+    "confirmBeforeEdit": false
   }
 }
