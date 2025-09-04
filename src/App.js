@@ -8,6 +8,7 @@ import React, {
   useCallback,
 } from 'react';
 import './App.css';
+import Header from './components/Header';
 import ShoppingCart from './components/ShoppingCart';
 import Footer from './components/Footer';
 import FloatingMattress from './components/FloatingMattress';
@@ -855,18 +856,12 @@ const App = () => {
       className="app-root"
       style={{ '--global-card-min-height': `${globalCardHeight}px` }}
     >
-      {/* Cart Button */}
-      <button 
-        className={`cart-button ${cartUpdated ? 'animate-pulse' : ''}`}
-        onClick={() => setIsCartOpen(true)}
-        aria-label="Открыть корзину"
-      >
-        🛒 {cartItems.length > 0 && (
-          <span className={`cart-badge ${cartUpdated ? 'animate-bounce' : ''}`}>
-            {cartItems.length}
-          </span>
-        )}
-      </button>
+      {/* Header */}
+      <Header 
+        cartItems={cartItems}
+        onCartOpen={() => setIsCartOpen(true)}
+        cartUpdated={cartUpdated}
+      />
 
       {/* Контент */}
       <div className="layout">
