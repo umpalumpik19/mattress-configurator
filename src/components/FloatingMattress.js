@@ -1,4 +1,3 @@
-// /src/components/FloatingMattress.js
 import React, { useState, useEffect, useRef } from 'react';
 import './FloatingMattress.css';
 
@@ -8,153 +7,133 @@ const FloatingMattress = ({
   selectedOptions,
   getSelectedItemData,
   visibleKeys,
-  sizeKind
+  sizeKind,
+  totalPrice,
+  layerTitles
 }) => {
-  const [isVisible, setIsVisible] = useState(false);
   const [animationKey, setAnimationKey] = useState(0);
-  const [isInitialized, setIsInitialized] = useState(false);
-  const [mainMattressInView, setMainMattressInView] = useState(true);
-  const [isHidingFast, setIsHidingFast] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
   const prevOptionsRef = useRef(selectedOptions);
-  const hideTimerRef = useRef(null);
-  const observerRef = useRef(null);
 
-  // Инициализация с задержкой 1 секунда
   useEffect(() => {
-    const initTimer = setTimeout(() => {
-      setIsInitialized(true);
-    }, 1000);
-
-    return () => clearTimeout(initTimer);
-  }, []);
-
-  // Intersection Observer для отслеживания видимости основного матраса
-  useEffect(() => {
-    const targetElement = document.querySelector('.visual .layers-canvas');
+    const layerKeys = ['sloj-odin', 'sloj-dva', 'sloj-tri'];
     
-    if (!targetElement) return;
-
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(entry => {
-          const wasInView = mainMattressInView;
-          const nowInView = entry.isIntersecting;
-          
-          setMainMattressInView(nowInView);
-          
-          // Если матрас вернулся в зону видимости и анимация была показана
-          if (!wasInView && nowInView && isVisible) {
-            // Очищаем таймер автоматического исчезновения
-            if (hideTimerRef.current) {
-              clearTimeout(hideTimerRef.current);
-              hideTimerRef.current = null;
-            }
-            
-            // Включаем быстрое исчезновение
-            setIsHidingFast(true);
-            
-            // Скрываем через 200мс (быстрая анимация)
-            setTimeout(() => {
-              setIsVisible(false);
-              setIsHidingFast(false);
-            }, 200);
-          }
-        });
-      },
-      { 
-        threshold: 0.1,
-        rootMargin: '0px'
-      }
+    const hasLayerChanged = layerKeys.some(key => 
+      selectedOptions[key] !== prevOptionsRef.current[key]
     );
 
-    observerRef.current.observe(targetElement);
-
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
-  }, [mainMattressInView, isVisible]);
-
-  // Отслеживание изменений слоев
-  useEffect(() => {
-    if (!isInitialized) return;
-
-    // Проверяем, изменились ли слои
-    const hasLayerChanged = visibleKeys.some(key => 
-      prevOptionsRef.current[key] !== selectedOptions[key]
-    );
-
-    // Показываем анимацию только если:
-    // 1. Основной матрас не виден
-    // 2. Произошло изменение слоя
-    if (!mainMattressInView && hasLayerChanged) {
-      // Очищаем предыдущий таймер, если он есть
-      if (hideTimerRef.current) {
-        clearTimeout(hideTimerRef.current);
-        hideTimerRef.current = null;
-      }
-
-      // Перезапускаем анимацию с новым ключом
+    if (hasLayerChanged) {
       setAnimationKey(prev => prev + 1);
-      setIsVisible(true);
-
-      // Скрываем через 3 секунды
-      hideTimerRef.current = setTimeout(() => {
-        setIsVisible(false);
-        hideTimerRef.current = null;
-      }, 3000);
     }
-
-    // Обновляем референс с предыдущими опциями
+    
     prevOptionsRef.current = { ...selectedOptions };
+  }, [selectedOptions]);
 
-  }, [selectedOptions, visibleKeys, isInitialized, mainMattressInView]);
-
-  // Очистка таймера при размонтировании
   useEffect(() => {
-    return () => {
-      if (hideTimerRef.current) {
-        clearTimeout(hideTimerRef.current);
+    const handleScroll = () => {
+      const scrollY = window.scrollY || 
+                      window.pageYOffset || 
+                      document.documentElement.scrollTop || 
+                      document.body.scrollTop || 0;
+      
+      const threshold = 150;
+      const newIsExpanded = scrollY < threshold;
+      
+      if (newIsExpanded !== isExpanded) {
+        setIsExpanded(newIsExpanded);
       }
     };
-  }, []);
 
-  if (!isVisible) return null;
+    const targets = [window, document, document.body, document.documentElement];
+    targets.forEach(target => {
+      if (target) {
+        target.addEventListener('scroll', handleScroll, { passive: true });
+      }
+    });
+    
+    handleScroll();
+    
+    return () => {
+      targets.forEach(target => {
+        if (target) {
+          target.removeEventListener('scroll', handleScroll);
+        }
+      });
+    };
+  }, [isExpanded]);
+
+  const renderLayers = () => {
+    const layers = [];
+    const kind = sizeKind(selectedSize);
+    
+    const frameUrl = `/layers/${selectedHeight}/${kind}/frame.webp`;
+    
+    visibleKeys.forEach((key) => {
+      const selectedItem = getSelectedItemData(key, selectedOptions[key]);
+      if (!selectedItem || !selectedItem.slug) return;
+      
+      const layerUrl = `/layers/${selectedHeight}/${kind}/${key}/${selectedItem.slug}.webp`;
+      
+      const zIndexMap = {
+        'sloj-odin': 1,
+        'sloj-dva': 10,
+        'sloj-tri': 2
+      };
+      
+      layers.push(
+        <img
+          key={key}
+          src={layerUrl}
+          alt={selectedItem.name || ''}
+          className="floating-mattress-layer"
+          style={{ zIndex: zIndexMap[key] || 0 }}
+          onError={(e) => e.target.style.display = 'none'}
+        />
+      );
+    });
+    
+    layers.push(
+      <img
+        key="frame"
+        src={frameUrl}
+        alt="Frame"
+        className="floating-mattress-layer"
+        style={{ zIndex: 100 }}
+        onError={(e) => e.target.style.display = 'none'}
+      />
+    );
+    
+    return layers;
+  };
 
   return (
-    <div className={`floating-mattress ${isHidingFast ? 'hiding-fast' : ''}`} key={animationKey}>
-      <div className="floating-mattress-container">
-        <div className="floating-mattress-canvas">
-          {/* Каркас матраса */}
+    <div className={`floating-mattress ${isExpanded ? 'expanded' : 'compact'}`}>
+      <div className="floating-mattress-container" key={animationKey}>
+        <div className="floating-mattress-image-wrapper">
           <img
             src={`/layers/${selectedHeight}/${sizeKind(selectedSize)}/frame.webp`}
-            alt="Каркас матраса"
-            className="floating-layer layer-frame"
-            style={{ zIndex: 100 }}
+            alt="Frame"
+            style={{ width: '100%', height: 'auto', display: 'block', visibility: 'hidden' }}
           />
-          
-          {/* Слои матраса */}
-          {visibleKeys.map((layerKey) => {
-            const selectedItem = getSelectedItemData(layerKey, selectedOptions[layerKey]);
-            if (!selectedItem) return null;
-            
-            const zIndexMap = { 
-              'sloj-odin': 1, 
-              'sloj-dva': 10, 
-              'sloj-tri': 2 
-            };
-            
-            return (
-              <img
-                key={layerKey}
-                src={`/layers/${selectedHeight}/${sizeKind(selectedSize)}/${layerKey}/${selectedItem.slug}.webp`}
-                alt={selectedItem.name}
-                className="floating-layer"
-                style={{ zIndex: zIndexMap[layerKey] }}
-              />
-            );
-          })}
+          {renderLayers()}
+        </div>
+        <div className="floating-mattress-info">
+          <div className="floating-mattress-layers">
+            {visibleKeys.map((key) => {
+              const item = getSelectedItemData(key, selectedOptions[key]);
+              return item?.name ? (
+                <div key={key} className="layer-row">
+                  <span className="layer-name">{item.name}</span>
+                </div>
+              ) : null;
+            })}
+          </div>
+          <div className="floating-mattress-price">
+            <span className="price-value">
+              {totalPrice.toLocaleString('ru-RU')}
+            </span>
+            <span className="price-currency">Kč</span>
+          </div>
         </div>
       </div>
     </div>

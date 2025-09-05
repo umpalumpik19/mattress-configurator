@@ -1,7 +1,8 @@
 /* Footer Styles */
 .site-footer {
-  background-color: #1a1a1a;
-  color: #ffffff;
+  background: var(--bg);
+  color: var(--text);
+  border-top: 1px solid var(--line);
   padding: 40px 0 20px 0;
   margin-top: 60px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -28,7 +29,7 @@
 .footer-column-title {
   font-size: 11px;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text);
   margin: 0 0 12px 0;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -45,21 +46,21 @@
 }
 
 .footer-link {
-  color: #b8b8b8;
+  color: var(--muted);
   text-decoration: none;
   font-size: 11px;
   line-height: 1.4;
-  transition: color 0.2s ease;
+  transition: color var(--anim-fast) var(--ease-natural);
   display: block;
 }
 
 .footer-link:hover {
-  color: #ffffff;
+  color: var(--text);
 }
 
 /* Company info column styling */
 .footer-company {
-  color: #b8b8b8;
+  color: var(--muted);
   font-size: 11px;
   line-height: 1.4;
 }
@@ -67,13 +68,13 @@
 .footer-website {
   margin-bottom: 2px;
   font-weight: 400;
-  color: #b8b8b8;
+  color: var(--muted);
 }
 
 .footer-trademark {
   margin: 8px 0 2px 0;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--text);
 }
 
 .footer-additional {
@@ -145,9 +146,4 @@
   }
 }
 
-/* Dark theme integration */
-@media (prefers-color-scheme: dark) {
-  .site-footer {
-    border-top: 1px solid #404066;
-  }
-}
+/* Footer теперь всегда использует дизайн-систему проекта */

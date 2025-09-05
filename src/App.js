@@ -306,8 +306,6 @@ const App = () => {
   const [cartItems, setCartItems] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
-  // Calculator visibility state for bottom bar breakdown
-  const [isCalculatorVisible, setIsCalculatorVisible] = useState(true);
 
   // Animation states
   const [priceChanged, setPriceChanged] = useState(false);
@@ -556,27 +554,6 @@ const App = () => {
     scheduleRecalc();
   }, [configData, selectedOptions, selectedHeight, isMobile, scheduleRecalc]);
 
-  // Отслеживание видимости калькулятора цены с помощью IntersectionObserver
-  useEffect(() => {
-    if (!priceCalcRef.current) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0];
-        setIsCalculatorVisible(entry.isIntersecting);
-      },
-      { 
-        threshold: 0.3, // 30% элемента должно быть видимо
-        rootMargin: '-20px' // Отступ для более раннего срабатывания
-      }
-    );
-
-    observer.observe(priceCalcRef.current);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [configData]); // Пересоздаем при загрузке данных
 
   // Ресайз/загрузка/догрузка картинок + изменения контейнера
   useEffect(() => {
@@ -834,6 +811,7 @@ const App = () => {
     if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
+
   if (loading) {
     return (
       <div className="app-root loading-screen">
@@ -856,49 +834,59 @@ const App = () => {
       className="app-root"
       style={{ '--global-card-min-height': `${globalCardHeight}px` }}
     >
-      {/* Header */}
-      <Header 
+      {/* Header временно отключен */}
+      {/* <Header 
         cartItems={cartItems}
         onCartOpen={() => setIsCartOpen(true)}
         cartUpdated={cartUpdated}
-      />
+      /> */}
+
+      {/* Временная кнопка корзины пока Header отключен */}
+      <button 
+        className={`cart-button ${cartUpdated ? 'animate-pulse' : ''}`}
+        onClick={() => setIsCartOpen(true)}
+        aria-label="Открыть корзину"
+        style={{
+          position: 'fixed',
+          top: '24px',
+          right: '24px',
+          zIndex: 1000,
+          background: 'var(--surface)',
+          border: '1px solid var(--line)',
+          borderRadius: '50px',
+          padding: '16px 20px',
+          fontSize: '22px',
+          color: 'var(--text)',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px'
+        }}
+      >
+        🛒 {cartItems.length > 0 && (
+          <span 
+            className={`cart-badge ${cartUpdated ? 'animate-bounce' : ''}`}
+            style={{
+              background: '#ff3b30',
+              color: 'white',
+              borderRadius: '50%',
+              width: '26px',
+              height: '26px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '14px',
+              fontWeight: '600',
+              minWidth: '26px'
+            }}
+          >
+            {cartItems.length}
+          </span>
+        )}
+      </button>
 
       {/* Контент */}
       <div className="layout">
-        {/* Визуализация для десктопа (обычная) */}
-        <div className="visual glass-panel">
-          
-          <div className="layers-canvas">
-            <img
-              src={`/layers/${selectedHeight}/${sizeKind(
-                selectedSize,
-              )}/frame.webp`}
-              alt="Каркас матраса"
-              className="mattress-layer layer-frame"
-              style={{ zIndex: 100 }}
-            />
-            {visibleKeys.map((layerKey, index) => {
-              const selectedItem = getSelectedItemData(
-                layerKey,
-                selectedOptions[layerKey],
-              );
-              if (!selectedItem) return null;
-              const zIndexMap = { 'sloj-odin': 1, 'sloj-dva': 10, 'sloj-tri': 2 };
-              return (
-                <img
-                  key={layerKey}
-                  src={`/layers/${selectedHeight}/${sizeKind(
-                    selectedSize,
-                  )}/${layerKey}/${selectedItem.slug}.webp`}
-                  alt={selectedItem.name}
-                  className={`mattress-layer layer-${index + 1}`}
-                  style={{ zIndex: zIndexMap[layerKey] }}
-                />
-              );
-            })}
-          </div>
-        </div>
-
         {/* Селекторы размеров и высоты */}
         <div className="controls">
           <div className="control-group glass-panel">
@@ -973,72 +961,6 @@ const App = () => {
           />
         </div>
 
-        {/* Калькулятор для мобильных/планшетов - в потоке страницы */}
-        {isMobile && (
-          <div className="price-calculator glass-panel" ref={priceCalcRef}>
-            <div className="price-header">
-              <span className="price-label">Cena a detaily</span>
-              <div className="price-amount">
-                <span className={`price-value ${priceChanged ? 'price-update' : ''}`}>
-                  {totalPrice.toLocaleString('ru-RU')}
-                </span>
-                <span className="price-currency">Kč</span>
-              </div>
-            </div>
-
-            <div className="price-breakdown">
-              <div className="price-row">
-                <span>Výška</span>
-                <span>{selectedHeight} cm</span>
-                <span className="price-col" />
-              </div>
-              <div className="price-row">
-                <span>Rozměr</span>
-                <span>{selectedSize}</span>
-                <span className="price-col" />
-              </div>
-
-              {visibleKeys.map((key) => {
-                const item = getSelectedItemData(
-                  key,
-                  selectedOptions[key],
-                );
-                return (
-                  <div key={key} className="price-row">
-                    <span>{LAYER_TITLES[key]}</span>
-                    <span>{item?.name || '-'}</span>
-                    <span className="price-col">
-                      {item?.price
-                        ? `${item.price.toLocaleString('ru-RU')} Kč`
-                        : ''}
-                    </span>
-                  </div>
-                );
-              })}
-
-              <div className="price-row">
-                <span>Potah</span>
-                <span>
-                  {getSelectedItemData('potah', selectedOptions['potah'])
-                    ?.name || '-'}
-                </span>
-                <span className="price-col">
-                  {getSelectedItemData('potah', selectedOptions['potah'])
-                    ?.price
-                    ? `${getSelectedItemData(
-                        'potah',
-                        selectedOptions['potah'],
-                      ).price.toLocaleString('ru-RU')} Kč`
-                    : ''}
-                </span>
-              </div>
-            </div>
-
-            <button className="add-to-cart-btn btn-primary" onClick={handleAddToCart}>
-              Přidat do košíku
-            </button>
-          </div>
-        )}
 
         {/* Блоки описания слоёв и информации */}
         <section className="details glass-panel">
@@ -1113,43 +1035,92 @@ const App = () => {
           </article>
         ))}
         </section>
-      </div>
 
-      {/* Нижний блок с ценой - только для мобильных устройств */}
-      {isMobile && (
-      <div className="bottom-bar" role="region" aria-label="Итоговая цена">
-        {/* Детализация слоев - показывается только когда калькулятор не виден */}
-        <div className={`bb-breakdown ${!isCalculatorVisible ? 'visible' : ''}`}>
-          {visibleKeys.map((key) => {
-            const item = getSelectedItemData(key, selectedOptions[key]);
-            return (
-              <div key={key} className="bb-breakdown-row">
-                <span className="bb-layer-title">{LAYER_TITLES[key]}</span>
-                <span className="bb-layer-name">{item?.name || '-'}</span>
-                <span className="bb-layer-price">
-                  {item?.price ? `${item.price.toLocaleString('ru-RU')} Kč` : ''}
+        {/* Калькулятор для мобильных/планшетов - в самом конце страницы после описаний */}
+        {isMobile && (
+          <div className="mobile-calculator price-calculator glass-panel" ref={priceCalcRef}>
+            <div className="price-header">
+              <span className="price-label">Cena a detaily</span>
+              <div className="price-amount">
+                <span className={`price-value ${priceChanged ? 'price-update' : ''}`}>
+                  {totalPrice.toLocaleString('ru-RU')}
+                </span>
+                <span className="price-currency">Kč</span>
+              </div>
+            </div>
+
+            <div className="price-breakdown">
+              <div className="price-row">
+                <span>Výška</span>
+                <span>{selectedHeight} cm</span>
+                <span className="price-col" />
+              </div>
+              <div className="price-row">
+                <span>Rozměr</span>
+                <span>{selectedSize}</span>
+                <span className="price-col" />
+              </div>
+
+              {visibleKeys.map((key) => {
+                const item = getSelectedItemData(
+                  key,
+                  selectedOptions[key],
+                );
+                return (
+                  <div key={key} className="price-row">
+                    <span>{LAYER_TITLES[key]}</span>
+                    <span>{item?.name || '-'}</span>
+                    <span className="price-col">
+                      {item?.price
+                        ? `${item.price.toLocaleString('ru-RU')} Kč`
+                        : ''}
+                    </span>
+                  </div>
+                );
+              })}
+
+              <div className="price-row">
+                <span>Potah</span>
+                <span>
+                  {getSelectedItemData('potah', selectedOptions['potah'])
+                    ?.name || '-'}
+                </span>
+                <span className="price-col">
+                  {getSelectedItemData('potah', selectedOptions['potah'])
+                    ?.price
+                    ? `${getSelectedItemData(
+                        'potah',
+                        selectedOptions['potah'],
+                      ).price.toLocaleString('ru-RU')} Kč`
+                    : ''}
                 </span>
               </div>
-            );
-          })}
-        </div>
+            </div>
 
-        <div className="bb-main-row">
-          <div className="bb-price">
-            <span className={`bb-value ${priceChanged ? 'price-update' : ''}`}>
-              {totalPrice.toLocaleString('ru-RU')}
-            </span>
-            <span className="bb-currency">Kč</span>
-          </div>
-
-          <div className="bb-actions">
-            <button className="bb-btn btn-primary pulse-small" onClick={scrollToDetails}>
-              Перейти к корзине
+            <button className="add-to-cart-btn btn-primary" onClick={handleAddToCart}>
+              Přidat do košíku
             </button>
           </div>
-        </div>
+        )}
       </div>
-      )}
+
+      {/* Кнопка корзины */}
+      <button 
+        className="cart-button-main btn-primary"
+        onClick={scrollToDetails}
+        style={{
+          position: 'fixed',
+          bottom: '24px',
+          right: '24px',
+          zIndex: 1000,
+          borderRadius: '50px',
+          padding: '12px 24px',
+          fontWeight: '700',
+          boxShadow: '0 4px 16px rgba(0, 0, 0, 0.3)'
+        }}
+      >
+        Перейти к корзине
+      </button>
 
       {/* Shopping Cart Modal */}
       <ShoppingCart
@@ -1162,15 +1133,6 @@ const App = () => {
         totalPrice={cartTotal}
       />
 
-      {/* Floating Mattress */}
-      <FloatingMattress
-        selectedSize={selectedSize}
-        selectedHeight={selectedHeight}
-        selectedOptions={selectedOptions}
-        getSelectedItemData={getSelectedItemData}
-        visibleKeys={visibleKeys}
-        sizeKind={sizeKind}
-      />
 
       {/* Floating Calculator */}
       {!isMobile && (
@@ -1240,6 +1202,18 @@ const App = () => {
           </div>
         </div>
       )}
+
+      {/* Floating Mattress */}
+      <FloatingMattress 
+        selectedSize={selectedSize}
+        selectedHeight={selectedHeight}
+        selectedOptions={selectedOptions}
+        getSelectedItemData={getSelectedItemData}
+        visibleKeys={visibleKeys}
+        sizeKind={sizeKind}
+        totalPrice={totalPrice}
+        layerTitles={LAYER_TITLES}
+      />
 
       {/* Footer */}
       <Footer />

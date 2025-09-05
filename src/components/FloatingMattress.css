@@ -1,179 +1,203 @@
-/* /src/components/FloatingMattress.css */
+:root {
+  --floating-mattress-height: 280px;
+  --floating-mattress-height-lg: 320px;
+  --floating-mattress-height-md: 250px;
+  --floating-mattress-height-sm: 210px;
+  --floating-mattress-height-xs: 180px;
+  --floating-mattress-top-offset: 20px;
+  --floating-mattress-space-offset: 40px;
+  
+  --mattress-compact-width: 374px;
+  --mattress-expanded-width: 500px;
+  --mattress-animation-duration: 0.6s;
+  --mattress-animation-easing: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
 .floating-mattress {
   position: fixed;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  top: var(--floating-mattress-top-offset);
+  left: 24px;
   z-index: 1000;
   pointer-events: none;
-  animation: slideDownBounce 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) forwards,
-             fadeOut 0.3s ease-out 2.7s forwards;
+  transition: top var(--mattress-animation-duration) var(--mattress-animation-easing);
 }
 
-/* Стеклянный контейнер */
+.floating-mattress.expanded {
+  top: 60px;
+}
+
+.floating-mattress.compact {
+  top: var(--floating-mattress-top-offset);
+}
+
 .floating-mattress-container {
-  width: min(35vw, 480px);
-  height: min(35vw, 480px);
-  background: rgba(22, 22, 24, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: min(4.5vw, 60px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 16px;
   box-shadow: 
-    0 20px 60px rgba(0, 0, 0, 0.5),
-    0 0 0 1px rgba(255, 255, 255, 0.05) inset,
-    0 10px 30px rgba(0, 0, 0, 0.3);
-  padding: 2px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-/* Холст для матраса */
-.floating-mattress-canvas {
+    0 10px 40px rgba(0, 0, 0, 0.3),
+    0 2px 10px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px;
+  display: inline-block;
   position: relative;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  animation: bubbleIn 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
-/* Слои матраса */
-.floating-layer {
+.floating-mattress-info {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.floating-mattress-price {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.floating-mattress-price .price-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.floating-mattress-price .price-currency {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.floating-mattress-layers {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.floating-mattress-layers .layer-row {
+  display: flex;
+  align-items: center;
+}
+
+.floating-mattress-layers .layer-name {
+  font-size: 10px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.2;
+}
+
+.floating-mattress-image-wrapper {
+  position: relative;
+  width: var(--mattress-compact-width);
+  height: auto;
+  display: block;
+  transition: all var(--mattress-animation-duration) var(--mattress-animation-easing);
+  transform-origin: center center;
+}
+
+.floating-mattress.expanded .floating-mattress-image-wrapper {
+  width: var(--mattress-expanded-width) !important;
+  transform: scale(1);
+}
+
+.floating-mattress.compact .floating-mattress-image-wrapper {
+  width: var(--mattress-compact-width) !important;
+  transform: scale(1);
+}
+
+.floating-mattress-layer {
   position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: contain;
-  max-width: 100%;
-  max-height: 100%;
+  image-rendering: crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
 }
 
-/* Анимация появления */
-@keyframes slideDownBounce {
+@keyframes bubbleIn {
   0% {
-    opacity: 0;
-    transform: translateX(-50%) translateY(-100px) scale(0.8);
+    transform: scale(0.8);
+    opacity: 0.8;
   }
-  50% {
-    opacity: 1;
-    transform: translateX(-50%) translateY(20px) scale(1.05);
+  40% {
+    transform: scale(1.1);
   }
-  70% {
-    transform: translateX(-50%) translateY(-5px) scale(0.98);
+  60% {
+    transform: scale(0.95);
+  }
+  80% {
+    transform: scale(1.02);
   }
   100% {
+    transform: scale(1);
     opacity: 1;
-    transform: translateX(-50%) translateY(0) scale(1);
   }
 }
 
-/* Анимация исчезновения */
-@keyframes fadeOut {
-  to {
-    opacity: 0;
-    transform: translateX(-50%) translateY(-10px) scale(0.95);
+@media screen and (min-width: 1200px) {
+  :root {
+    --mattress-compact-width: 432px;
+    --mattress-expanded-width: 600px;
   }
 }
 
-/* Быстрая анимация исчезновения */
-@keyframes fastFadeOut {
-  to {
-    opacity: 0;
-    transform: translateX(-50%) translateY(-10px) scale(0.95);
+@media screen and (max-width: 1024px) {
+  :root {
+    --mattress-compact-width: 331px;
+    --mattress-expanded-width: 450px;
   }
 }
 
-/* Класс для быстрого исчезновения */
-.floating-mattress.hiding-fast {
-  animation: fastFadeOut 0.2s ease-out forwards !important;
-}
-
-/* Адаптивные размеры */
-
-/* Большие экраны */
-@media (min-width: 1400px) {
+@media screen and (max-width: 768px) {
+  :root {
+    --mattress-compact-width: 288px;
+    --mattress-expanded-width: 380px;
+  }
+  
   .floating-mattress-container {
-    width: min(32vw, 540px);
-    height: min(32vw, 540px);
-    border-radius: min(4vw, 72px);
+    border-radius: 14px;
+    padding: 6px;
+  }
+  
+  .floating-mattress.expanded {
+    top: 40px;
   }
 }
 
-/* Планшеты и ноутбуки */
-@media (max-width: 1024px) and (min-width: 769px) {
+@media screen and (max-width: 480px) {
+  :root {
+    --mattress-compact-width: 245px;
+    --mattress-expanded-width: 320px;
+  }
+  
   .floating-mattress-container {
-    width: min(40vw, 420px);
-    height: min(40vw, 420px);
-    border-radius: min(5vw, 54px);
+    border-radius: 12px;
+    padding: 5px;
+  }
+  
+  .floating-mattress.expanded {
+    top: 30px;
   }
 }
 
-/* Мобильные устройства */
-@media (max-width: 768px) and (min-width: 481px) {
+@media (prefers-reduced-motion: reduce) {
   .floating-mattress-container {
-    width: min(50vw, 360px);
-    height: min(50vw, 360px);
-    border-radius: min(6vw, 48px);
-    background: rgba(22, 22, 24, 0.9);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
+    animation: none;
   }
-}
-
-/* Маленькие экраны */
-@media (max-width: 480px) and (min-width: 361px) {
-  .floating-mattress-container {
-    width: min(70vw, 300px);
-    height: min(70vw, 300px);
-    border-radius: min(8vw, 42px);
-    background: rgba(22, 22, 24, 0.9);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    box-shadow: 
-      0 15px 40px rgba(0, 0, 0, 0.4),
-      0 0 0 1px rgba(255, 255, 255, 0.05) inset,
-      0 8px 20px rgba(0, 0, 0, 0.25);
+  
+  @keyframes bubbleIn {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 1;
+    }
   }
-}
-
-/* Очень маленькие экраны */
-@media (max-width: 360px) {
-  .floating-mattress-container {
-    width: min(80vw, 270px);
-    height: min(80vw, 270px);
-    border-radius: min(10vw, 36px);
-    background: rgba(22, 22, 24, 0.9);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    box-shadow: 
-      0 15px 40px rgba(0, 0, 0, 0.4),
-      0 0 0 1px rgba(255, 255, 255, 0.05) inset,
-      0 8px 20px rgba(0, 0, 0, 0.25);
-  }
-}
-
-/* Улучшенная поддержка для Safari */
-@supports (-webkit-backdrop-filter: blur(20px)) {
-  .floating-mattress-container {
-    -webkit-backdrop-filter: blur(20px);
-  }
-}
-
-/* Дополнительные стили для плавности анимации */
-.floating-mattress {
-  will-change: transform, opacity;
-}
-
-.floating-mattress-container {
-  will-change: transform;
-}
-
-/* Предотвращение мерцания при загрузке изображений */
-.floating-layer {
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
 }

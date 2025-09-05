@@ -1,18 +1,18 @@
 /* /src/App.css */
 /* База */
 :root{
-  /* Темная тема Apple‑стиля */
-  --bg: radial-gradient(1200px 800px at 20% -10%, #141414 0%, #0a0a0a 55%) fixed, #0a0a0a; /* глубокий радиальный фон */
-  --surface: rgba(22,22,24,.6);
-  --surface-strong: rgba(28,28,30,.7);
-  --bg-2: rgba(18,18,20,.6);
-  --bg-3: rgba(24,24,26,.6);
-  --text: #e6e7ea;
-  --muted: #b2b6bd;
-  --accent: #ffffff; /* базовый акцент */
-  --accent-2: #ffffff9d; /* близкий оттенок */
-  --line: color-mix(in oklab, #ffffff 8%, transparent);
-  --radius: 12px;
+  /* Twitter/X темная тема */
+  --bg: #000000; /* абсолютно черный фон */
+  --surface: #000000; /* тот же черный что и фон, как в Twitter */
+  --surface-strong: #111111; /* чуть светлее для hover эффектов */
+  --bg-2: #000000; /* черный фон для всех блоков */
+  --bg-3: #000000; /* черный фон для элементов управления */
+  --text: #ffffff; /* чистый белый текст */
+  --muted: #ffffff; /* серый текст как в Twitter */
+  --accent: #ffffff; /* белый акцент */
+  --accent-2: #e7e9ea; /* светло-серый при hover */
+  --line: rgba(95, 99, 103, 0.3); /* тусклые границы */
+  --radius: 16px; /* увеличенный радиус как в Twitter */
   --gap: 24px;
   --padded: 20px;
   --media-h: 40px; /* фиксированная высота медиазоны в карточке */
@@ -43,17 +43,17 @@
   --hover-scale: scale(1.02);
   --micro-scale: scale(1.05);
 
-  /* Единая система кнопок */
-  --btn-bg: linear-gradient(180deg, color-mix(in oklab, var(--accent) 12%, #0b0b0c) 0%, #0b0b0c 100%);
-  --btn-bg-hover: linear-gradient(180deg, color-mix(in oklab, var(--accent) 16%, #111113) 0%, #111113 100%);
-  --btn-color: #fff;
+  /* Единая система кнопок в стиле Twitter */
+  --btn-bg: #1A8CD8; /* синий фон */
+  --btn-bg-hover: #1678C2; /* темно-синий при hover */
+  --btn-color: #ffffff; /* белый текст на синем фоне */
   --btn-border: 1px solid var(--line);
-  --btn-radius: var(--radius);
-  --btn-padding: 12px 16px;
+  --btn-radius: 50px; /* круглые кнопки как в Twitter */
+  --btn-padding: 12px 24px; /* чуть больше по бокам */
   --btn-font-weight: 700;
-  --btn-shadow: 0 4px 12px rgba(0,0,0,.25);
-  --btn-shadow-hover: 0 8px 28px rgba(0,0,0,.35), var(--glow-soft);
-  --btn-ripple-color: rgba(255, 255, 255, 0.3);
+  --btn-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* черная тень */
+  --btn-shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.3);
+  --btn-ripple-color: rgba(0, 0, 0, 0.1);
 
   /* Глобальная высота карточек (из App ставится инлайном) */
   --global-card-min-height: 56px;
@@ -64,7 +64,10 @@ html, body, #root { height: 100%; background: var(--bg); background-attachment: 
 body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Arial, sans-serif; color: var(--text); }
 html, body { overflow-x: hidden; } /* Никогда не допускаем горизонтальный скролл страницы */
 
-.app-root { min-height: 100%; } /* bottom-bar теперь только на мобильных */
+.app-root { 
+  min-height: 100%;
+  /* padding-top: 64px; */ /* Отступ временно отключен пока нет header */
+}
 
 .loading-screen,
 .error-screen {
@@ -87,13 +90,14 @@ html, body { overflow-x: hidden; } /* Никогда не допускаем г�
   max-width: 1680px; /* Увеличили максимальную ширину */
   margin: 0 auto;
   padding: 24px;
+  padding-top: calc(var(--floating-mattress-height) + var(--floating-mattress-top-offset) + var(--floating-mattress-space-offset));
   display: grid;
   grid-template-columns: 1fr; /* Теперь одна колонка */
   grid-template-areas:
-    "visual"
     "controls"
     "selectors"
-    "details";
+    "details"
+    "calculator";
   gap: var(--gap);
   position: relative;
   min-width: 0; /* чтобы дети могли сжиматься и не плодили горизонтальную прокрутку */
@@ -122,8 +126,9 @@ html, body { overflow-x: hidden; } /* Никогда не допускаем г�
   background: var(--bg-3);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  color: var(--muted);
-  font-size: 13px;
+  color: var(--text); /* белый текст */
+  font-size: 15px; /* больший размер */
+  font-weight: 400; /* обычная жирность */
   transition: border-color var(--dur) var(--elev), transform var(--dur-fast) var(--elev), box-shadow var(--dur) var(--elev), background var(--dur) var(--elev);
   white-space: nowrap;
   overflow: hidden;
@@ -163,8 +168,6 @@ html, body { overflow-x: hidden; } /* Никогда не допускаем г�
   align-items: start;
   padding: 16px;
   background: var(--surface);
-  backdrop-filter: saturate(140%) blur(10px);
-  box-shadow: inset 0 1px rgba(255,255,255,.05), 0 8px 30px rgba(0,0,0,.28);
 }
 .detail-image-wrap{ display: flex; align-items: center; justify-content: center; }
 .detail-image{ width: 100%; max-width: 220px; height: auto; object-fit: contain; border-radius: 4px; }
@@ -227,7 +230,7 @@ html, body { overflow-x: hidden; } /* Никогда не допускаем г�
   align-items: center;
   gap: 6px;
   padding: 6px;
-  background: var(--surface-strong);
+  background: var(--surface); /* черный фон как у всех кнопок */
   border: 1px solid var(--line);
   border-radius: var(--radius);
   min-height: var(--global-card-min-height);
@@ -274,10 +277,11 @@ html, body { overflow-x: hidden; } /* Никогда не допускаем г�
 
 /* Текст: переносы только по словам (НЕ по буквам) */
 .option-name{
-  font-size: 10px;
+  font-size: 11px; /* увеличенный размер */
   line-height: 1.2;
   text-align: center;
-  color: var(--muted);
+  color: var(--text); /* белый цвет */
+  font-weight: 450; /* обычная жирность */
   white-space: normal;
   word-break: normal;         /* не ломаем по буквам */
   overflow-wrap: break-word;  /* переносим только длинные слова */
@@ -297,6 +301,11 @@ html, body { overflow-x: hidden; } /* Никогда не допускаем г�
   overflow-y: auto;
 }
 */
+/* Область калькулятора в мобильной версии */
+.mobile-calculator{
+  grid-area: calculator;
+}
+
 /* Плавающий калькулятор */
 .floating-calculator {
   position: fixed;
@@ -313,17 +322,11 @@ html, body { overflow-x: hidden; } /* Никогда не допускаем г�
   border-radius: var(--radius);
   padding: var(--padded);
   background: var(--surface);
-  backdrop-filter: saturate(140%) blur(20px);
-  box-shadow: 
-    var(--glow-soft),
-    0 20px 60px rgba(0, 0, 0, 0.4), 
-    inset 0 1px rgba(255, 255, 255, 0.1);
 }
 
-/* Стили для compact состояния и toggle кнопки удалены */
-
-/* Дополнительная подсветка для десктопного калькулятора */
-.floating-calculator .price-calculator {
+/* Стили подсветки только для плавающего калькулятора */
+.floating-calculator .price-calculator{
+  backdrop-filter: saturate(140%) blur(20px);
   box-shadow: 
     var(--glow-soft),
     0 20px 60px rgba(0, 0, 0, 0.4), 
@@ -397,16 +400,13 @@ html, body { overflow-x: hidden; } /* Никогда не допускаем г�
   position: fixed;
   left: 0; right: 0; bottom: 0;
   z-index: 1200;
-  background: rgba(15,15,16,.8);
+  background: var(--surface);
   border-top: 1px solid var(--line);
-  backdrop-filter: saturate(140%) blur(10px);
   padding: 10px 16px;
   display: flex;
   flex-direction: column;
   transition: all var(--anim-medium) var(--ease-natural);
-  box-shadow:
-    0 0 25px rgba(255, 255, 255, 0.1) inset,
-    0 -5px 30px rgba(255, 255, 255, 0.08);
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* Основная строка с ценой и кнопкой */
@@ -486,60 +486,16 @@ html, body { overflow-x: hidden; } /* Никогда не допускаем г�
 
 /* Правила удалены - bottom-bar больше не используется на десктопе */
 
-/* Стеклянные панели с единым стилем */
+/* Блоки в стиле Twitter - однотонные с тусклыми гранями */
 .glass-panel{
   background: var(--surface);
-  backdrop-filter: saturate(140%) blur(10px);
-  box-shadow: inset 0 1px rgba(255,255,255,.05), 0 8px 30px rgba(0,0,0,.28);
-}
-
-/* Cart Button */
-.cart-button {
-  position: fixed;
-  top: 24px;
-  right: 24px;
-  z-index: 1000;
-  background: var(--surface);
-  backdrop-filter: saturate(140%) blur(10px);
   border: 1px solid var(--line);
-  border-radius: 50px;
-  padding: 16px 20px;
-  font-size: 22px;
-  color: var(--text);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  transition: all var(--anim-fast) var(--ease-natural);
   box-shadow: 
-    var(--glow-soft),
-    0 4px 20px rgba(0, 0, 0, 0.25),
-    inset 0 1px rgba(255, 255, 255, 0.1);
+    0 0 0 1px rgba(95, 99, 103, 0.15),
+    0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-.cart-button:hover {
-  background: var(--surface-strong);
-  transform: var(--hover-lift);
-  box-shadow: 
-    var(--glow-medium),
-    0 8px 30px rgba(0, 0, 0, 0.35),
-    inset 0 1px rgba(255, 255, 255, 0.15);
-}
-
-.cart-badge {
-  background: #ff3b30;
-  color: white;
-  border-radius: 50%;
-  width: 26px;
-  height: 26px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  font-weight: 600;
-  min-width: 26px;
-  transition: all var(--anim-fast) var(--ease-bounce);
-}
+/* Старые стили кнопки корзины удалены - теперь в Header.css */
 
 /* UX Микроанимации */
 
@@ -614,39 +570,7 @@ html, body { overflow-x: hidden; } /* Никогда не допускаем г�
   animation-play-state: paused;
 }
 
-/* Анимация пульсации корзины при добавлении товара */
-@keyframes cartPulse {
-  0%, 100% { 
-    transform: scale(1); 
-  }
-  50% { 
-    transform: scale(1.1); 
-    box-shadow: 
-      var(--glow-strong),
-      0 8px 30px rgba(0, 0, 0, 0.4),
-      inset 0 1px rgba(255, 255, 255, 0.2);
-  }
-}
-
-/* Анимация подпрыгивания badge */
-@keyframes badgeBounce {
-  0%, 100% { 
-    transform: translateY(0) scale(1); 
-  }
-  50% { 
-    transform: translateY(-4px) scale(1.15); 
-  }
-}
-
-/* Класс для запуска анимации корзины */
-.cart-button.animate-pulse {
-  animation: cartPulse 0.6s var(--ease-natural);
-}
-
-/* Класс для запуска анимации badge */
-.cart-badge.animate-bounce {
-  animation: badgeBounce 0.5s var(--ease-bounce);
-}
+/* Анимации корзины перенесены в Header.css */
 
 /* Легкая пульсация для кнопки bottom bar */
 @keyframes gentlePulse {
@@ -679,7 +603,7 @@ html, body { overflow-x: hidden; } /* Никогда не допускаем г�
   }
   50% { 
     transform: var(--micro-scale); 
-    color: color-mix(in oklab, var(--accent) 90%, #fff 10%);
+    color: var(--accent);
   }
 }
 
@@ -735,6 +659,13 @@ html, body { overflow-x: hidden; } /* Никогда не допускаем г�
   }
 }
 
+/* Большие экраны - используем большую высоту контейнера */
+@media (min-width: 1200px) {
+  .layout {
+    padding-top: calc(var(--floating-mattress-height-lg) + var(--floating-mattress-top-offset) + var(--floating-mattress-space-offset));
+  }
+}
+
 /* Шаг 2: планшеты — одна колонка контента */
 @media (max-width: 1100px){
   .visual .layers-canvas{ height: 360px; }
@@ -750,19 +681,17 @@ html, body { overflow-x: hidden; } /* Никогда не допускаем г�
 @media (max-width: 1024px){
   :root{ --media-h: 32px; }
 
-  .app-root { padding-bottom: 64px; } /* Место под bottom-bar на мобильных */
-  .layout{ padding: 16px; gap: 16px; }
+  .app-root { 
+    /* padding-top: 56px; */ /* Компактный header временно отключен */
+    padding-bottom: 64px; /* Место под bottom-bar на мобильных */
+  }
+  .layout{ 
+    padding: 16px; 
+    gap: 16px;
+    padding-top: calc(var(--floating-mattress-height-md) + var(--floating-mattress-top-offset) + 30px);
+  }
   
-  /* Увеличение иконки корзины на планшетах и мобильных */
-  .cart-button {
-    padding: 14px 18px;     /* было: 12px 16px */
-    font-size: 22px;        /* было: 18px */
-  }
-  .cart-badge {
-    width: 24px;            /* было: 20px */
-    height: 24px;           /* было: 20px */
-    font-size: 14px;        /* было: 12px */
-  }
+  /* Старые мобильные стили корзины удалены */
   /* Более компактный и адаптивный бокс изображения на мобилках */
   .visual .layers-canvas{ height: clamp(200px, 38vh, 280px); }
   .controls{ grid-template-columns: 1fr; }
@@ -797,6 +726,12 @@ html, body { overflow-x: hidden; } /* Никогда не допускаем г�
 }
 
 /* Очень маленькие экраны */
+@media (max-width: 768px) {
+  .layout {
+    padding-top: calc(var(--floating-mattress-height-sm) + var(--floating-mattress-top-offset) + 20px);
+  }
+}
+
 @media (max-width: 600px){
   :root{ --media-h: 32px; }
   .size-options{ grid-template-columns: repeat(auto-fill, minmax(56px, 1fr)); }
@@ -828,15 +763,12 @@ html, body { overflow-x: hidden; } /* Никогда не допускаем г�
   .bb-layer-name { font-size: 10px; }
   .bb-layer-price { font-size: 10px; }
   
-  .cart-button {
-    top: 16px;
-    right: 16px;
-    padding: 12px 16px;     /* было: 10px 14px */
-    font-size: 20px;        /* было: 16px */
-  }
-  .cart-badge {
-    width: 22px;            /* было: 20px */
-    height: 22px;           /* было: 20px */
+  /* Старые стили корзины для 600px удалены */
+}
+
+@media (max-width: 480px) {
+  .layout {
+    padding-top: calc(var(--floating-mattress-height-xs) + var(--floating-mattress-top-offset) + 15px);
   }
 }
 
@@ -868,16 +800,5 @@ html, body { overflow-x: hidden; } /* Никогда не допускаем г�
   .bb-layer-name { font-size: 9px; }
   .bb-layer-price { font-size: 9px; }
   
-  .cart-button {
-    top: 12px;
-    right: 12px;
-    padding: 10px 14px;     /* было: 8px 12px */
-    font-size: 18px;        /* было: 14px */
-  }
-  
-  .cart-badge {
-    width: 18px;
-    height: 18px;
-    font-size: 11px;
-  }
+  /* Старые стили корзины для 420px удалены */
 }
