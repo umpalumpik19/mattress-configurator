@@ -9,7 +9,8 @@ const FloatingMattress = ({
   visibleKeys,
   sizeKind,
   totalPrice,
-  layerTitles
+  layerTitles,
+  handleAddToCart
 }) => {
   const [animationKey, setAnimationKey] = useState(0);
   const [isExpanded, setIsExpanded] = useState(true);
@@ -127,12 +128,28 @@ const FloatingMattress = ({
                 </div>
               ) : null;
             })}
+            {selectedOptions['potah'] && (() => {
+              const coverItem = getSelectedItemData('potah', selectedOptions['potah']);
+              return coverItem?.name ? (
+                <div className="layer-row cover-row">
+                  <span className="layer-name">Potah: {coverItem.name}</span>
+                </div>
+              ) : null;
+            })()}
           </div>
-          <div className="floating-mattress-price">
-            <span className="price-value">
-              {totalPrice.toLocaleString('ru-RU')}
-            </span>
-            <span className="price-currency">Kč</span>
+          <div className="floating-mattress-right">
+            <div className="floating-mattress-price">
+              <span className="price-value">
+                {totalPrice.toLocaleString('ru-RU')}
+              </span>
+              <span className="price-currency">Kč</span>
+            </div>
+            <button 
+              className="floating-mattress-add-btn btn-primary" 
+              onClick={handleAddToCart}
+            >
+              Přidat do košíku
+            </button>
           </div>
         </div>
       </div>

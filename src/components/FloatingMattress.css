@@ -1,11 +1,11 @@
 :root {
-  --floating-mattress-height: 280px;
-  --floating-mattress-height-lg: 320px;
-  --floating-mattress-height-md: 250px;
-  --floating-mattress-height-sm: 210px;
-  --floating-mattress-height-xs: 180px;
+  --floating-mattress-height: 350px;
+  --floating-mattress-height-lg: 400px;
+  --floating-mattress-height-md: 320px;
+  --floating-mattress-height-sm: 280px;
+  --floating-mattress-height-xs: 240px;
   --floating-mattress-top-offset: 20px;
-  --floating-mattress-space-offset: 40px;
+  --floating-mattress-space-offset: 24px; /* Синхронизировано с --gap */
   
   --mattress-compact-width: 374px;
   --mattress-expanded-width: 500px;
@@ -16,7 +16,7 @@
 .floating-mattress {
   position: fixed;
   top: var(--floating-mattress-top-offset);
-  left: 24px;
+  left: calc(50% - 840px + 16px); /* Точное выравнивание контента с кнопками */
   z-index: 1000;
   pointer-events: none;
   transition: top var(--mattress-animation-duration) var(--mattress-animation-easing);
@@ -31,14 +31,11 @@
 }
 
 .floating-mattress-container {
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  background: rgba(0, 0, 0, 0.5);
+  background: #000000;
   border-radius: 16px;
   box-shadow: 
     0 10px 40px rgba(0, 0, 0, 0.3),
-    0 2px 10px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    0 2px 10px rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 8px;
   display: inline-block;
@@ -47,12 +44,12 @@
 }
 
 .floating-mattress-info {
-  margin-top: 12px;
-  padding-top: 12px;
+  margin-top: 8px;
+  padding-top: 6px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: stretch;
   gap: 12px;
 }
 
@@ -93,6 +90,33 @@
   line-height: 1.2;
 }
 
+
+.floating-mattress-add-btn {
+  margin-top: auto;
+  width: auto;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 7px;
+  border: none;
+  background: #1A8CD8;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  pointer-events: auto;
+}
+
+.floating-mattress-add-btn:hover {
+  background: #1678C2;
+}
+
+.floating-mattress-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
 .floating-mattress-image-wrapper {
   position: relative;
   width: var(--mattress-compact-width);
@@ -125,21 +149,19 @@
 
 @keyframes bubbleIn {
   0% {
-    transform: scale(0.8);
-    opacity: 0.8;
-  }
-  40% {
-    transform: scale(1.1);
-  }
-  60% {
     transform: scale(0.95);
   }
+  40% {
+    transform: scale(1.03);
+  }
+  60% {
+    transform: scale(0.99);
+  }
   80% {
-    transform: scale(1.02);
+    transform: scale(1.01);
   }
   100% {
     transform: scale(1);
-    opacity: 1;
   }
 }
 
@@ -157,6 +179,18 @@
   }
 }
 
+@media screen and (max-width: 1680px) {
+  .floating-mattress {
+    left: 16px; /* Точное выравнивание контента */
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  .floating-mattress {
+    left: 8px; /* Точное выравнивание контента */
+  }
+}
+
 @media screen and (max-width: 768px) {
   :root {
     --mattress-compact-width: 288px;
@@ -170,6 +204,10 @@
   
   .floating-mattress.expanded {
     top: 40px;
+  }
+  
+  .floating-mattress {
+    left: 8px; /* Точное выравнивание контента */
   }
 }
 

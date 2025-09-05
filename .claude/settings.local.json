@@ -9,7 +9,8 @@
       "Read(/C:\\Users\\boris\\Конфигуратор\\Админка и сайт\\Конфигуратор\\src\\components/**)",
       "Edit(**)",
       "Write(**)",
-      "MultiEdit(**)"
+      "MultiEdit(**)",
+      "Read(//c/Users/boris/Изображения/Снимки экрана/**)"
     ],
     "defaultMode": "acceptEdits",
     "autoSave": true,

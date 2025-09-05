@@ -802,3 +802,32 @@ html, body { overflow-x: hidden; } /* Никогда не допускаем г�
   
   /* Старые стили корзины для 420px удалены */
 }
+
+/* Фиксированная корзина */
+.fixed-cart-button.animate-pulse {
+  animation: fixedCartPulse 0.6s var(--ease-natural);
+}
+
+.fixed-cart-badge.animate-bounce {
+  animation: fixedCartBounce 0.4s var(--ease-bounce);
+}
+
+@keyframes fixedCartPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+@keyframes fixedCartBounce {
+  0% { transform: scale(1) translateY(0); }
+  30% { transform: scale(1.1) translateY(-2px); }
+  60% { transform: scale(0.95) translateY(0); }
+  100% { transform: scale(1) translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fixed-cart-button.animate-pulse,
+  .fixed-cart-badge.animate-bounce {
+    animation: none;
+  }
+}
